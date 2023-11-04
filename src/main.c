@@ -1,9 +1,9 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <string.h>
 
 #include "directory.h"
 #include "prompt.h"
@@ -20,7 +20,7 @@ int main()
     while (1)
     {
         getPromptInfo(username, hostName, currentDir);
-        printf("%s%s@%s:%s%s$ %s", COLOR_DARK_PURPLE, username, hostName, COLOR_TEAL, currentDir, COLOR_RESET);
+        printf("%s%s@%s:%s%s$ %s", COLOR_LIGHT_PURPLE, username, hostName, COLOR_CYAN, currentDir, COLOR_RESET);
 
         if (fgets(input, MAX_INPUT_SIZE, stdin) == NULL)
         {

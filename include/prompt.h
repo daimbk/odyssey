@@ -5,8 +5,8 @@
 #define HOST_NAME_MAX 64
 #define LOGIN_NAME_MAX 256
 
-#define COLOR_DARK_PURPLE "\033[38;5;53m"
-#define COLOR_TEAL "\033[38;5;30m"
+#define COLOR_LIGHT_PURPLE "\033[38;5;55m"
+#define COLOR_CYAN "\033[38;5;6m"
 #define COLOR_RESET "\033[0m"
 
 #include <pwd.h>
