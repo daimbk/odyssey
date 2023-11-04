@@ -1,6 +1,9 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <string.h>
 
 #define MAX_INPUT_SIZE 1024
 
@@ -42,10 +45,35 @@ int main()
             exit(0);
         }
 
-        // printing tokens for testing
-        for (int i = 0; i < tokenCount; i++)
+        // create a child process
+        pid_t child_pid = fork();
+
+        if (child_pid == -1)
         {
-            printf("Token %d: %s\n", i, tokens[i]);
+            perror("Error: Fork Failed");
+            exit(1);
+        }
+
+        if (child_pid == 0)
+        {
+            // child process
+
+            // null-terminate the tokens array
+            tokens[tokenCount] = NULL;
+
+            if (execvp(tokens[0], tokens) == -1)
+            {
+                perror("Error: execvp");
+                exit(1);
+            }
+        }
+        else
+        {
+            // parent process
+
+            // wait for the child to finish
+            int status;
+            waitpid(child_pid, &status, 0);
         }
     }
 
