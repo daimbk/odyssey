@@ -19,21 +19,33 @@ int main()
         // remove the newline character at the end of the input
         input[strcspn(input, "\n")] = '\0';
 
+        // declare an array to store tokens
+        char *tokens[MAX_INPUT_SIZE];
+
         // tokenize input
-        // Process input (executing commands, etc.)
-        // for example, currently displaying the parsed tokens as output
         char *token = strtok(input, " ");
+        int tokenCount = 0; // to keep track of the number of tokens
+
         while (token != NULL)
         {
-            // quit shell on "exit" command
-            if (strcmp(token, "exit") == 0)
-            {
-                printf("Exiting Shell..\n");
-                exit(0);
-            }
+            // store the token in the tokens array
+            tokens[tokenCount] = token;
+            tokenCount++;
 
-            printf("Token: %s\n", token);
             token = strtok(NULL, " ");
+        }
+
+        // quit shell on "exit" command
+        if (tokenCount == 1 && strcmp(tokens[0], "exit") == 0)
+        {
+            printf("Exiting Shell..\n");
+            exit(0);
+        }
+
+        // printing tokens for testing
+        for (int i = 0; i < tokenCount; i++)
+        {
+            printf("Token %d: %s\n", i, tokens[i]);
         }
     }
 
