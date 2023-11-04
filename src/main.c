@@ -5,10 +5,13 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <pwd.h>
+#include <limits.h>
 
 #include "directory.h"
 
 #define MAX_INPUT_SIZE 1024
+#define PATH_MAX 4096
+#define HOST_NAME_MAX 64
 
 // ANSI escape codes for text color
 #define COLOR_DARK_PURPLE "\033[38;5;53m"
@@ -32,11 +35,19 @@ void replaceHomeWithPath(char *path)
 int main()
 {
     char input[MAX_INPUT_SIZE];
+    char currentDir[PATH_MAX];
+    char hostName[HOST_NAME_MAX];
+    struct passwd *pw = getpwuid(getuid());
 
     while (1)
     {
-        char currentDir[MAX_INPUT_SIZE];
-        if (getcwd(currentDir, sizeof(currentDir)) == NULL)
+        if (gethostname(hostName, HOST_NAME_MAX) != 0)
+        {
+            perror("Error: gethostname");
+            break;
+        }
+
+        if (getcwd(currentDir, PATH_MAX) == NULL)
         {
             perror("Error: getcwd");
             break;
@@ -44,7 +55,7 @@ int main()
 
         replaceHomeWithPath(currentDir);
 
-        printf("%sda-shell:%s%s$ %s", COLOR_DARK_PURPLE, COLOR_TEAL, currentDir, COLOR_RESET);
+        printf("%s%s@%s:%s%s$ %s", COLOR_DARK_PURPLE, pw->pw_name, hostName, COLOR_TEAL, currentDir, COLOR_RESET);
 
         if (fgets(input, MAX_INPUT_SIZE, stdin) == NULL)
         {
