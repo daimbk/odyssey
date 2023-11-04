@@ -1,28 +1,26 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <string.h>
 
 #include "directory.h"
+#include "prompt.h"
 
 #define MAX_INPUT_SIZE 1024
 
 int main()
 {
     char input[MAX_INPUT_SIZE];
+    char currentDir[PATH_MAX];
+    char hostName[HOST_NAME_MAX];
+    char username[LOGIN_NAME_MAX];
 
     while (1)
     {
-        char currentDir[MAX_INPUT_SIZE];
-        if (getcwd(currentDir, sizeof(currentDir)) == NULL)
-        {
-            perror("Error: getcwd");
-            break;
-        }
-
-        printf("da-shell:~%s$ ", currentDir);
+        getPromptInfo(username, hostName, currentDir);
+        printf("%s%s@%s:%s%s$ %s", COLOR_LIGHT_PURPLE, username, hostName, COLOR_CYAN, currentDir, COLOR_RESET);
 
         if (fgets(input, MAX_INPUT_SIZE, stdin) == NULL)
         {
