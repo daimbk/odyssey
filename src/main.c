@@ -4,58 +4,23 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <pwd.h>
-#include <limits.h>
 
 #include "directory.h"
+#include "prompt.h"
 
 #define MAX_INPUT_SIZE 1024
-#define PATH_MAX 4096
-#define HOST_NAME_MAX 64
-
-// ANSI escape codes for text color
-#define COLOR_DARK_PURPLE "\033[38;5;53m"
-#define COLOR_TEAL "\033[38;5;30m"
-#define COLOR_RESET "\033[0m"
-
-// function to replace home directory with ~ in the path
-void replaceHomeWithPath(char *path)
-{
-    struct passwd *pw = getpwuid(getuid());
-    const char *homeDir = pw->pw_dir;
-    size_t homeDirLen = strlen(homeDir);
-
-    if (strncmp(path, homeDir, homeDirLen) == 0)
-    {
-        memmove(path, "~", 1);
-        memmove(path + 1, path + homeDirLen, strlen(path) - homeDirLen + 1);
-    }
-}
 
 int main()
 {
     char input[MAX_INPUT_SIZE];
     char currentDir[PATH_MAX];
     char hostName[HOST_NAME_MAX];
-    struct passwd *pw = getpwuid(getuid());
+    char username[LOGIN_NAME_MAX];
 
     while (1)
     {
-        if (gethostname(hostName, HOST_NAME_MAX) != 0)
-        {
-            perror("Error: gethostname");
-            break;
-        }
-
-        if (getcwd(currentDir, PATH_MAX) == NULL)
-        {
-            perror("Error: getcwd");
-            break;
-        }
-
-        replaceHomeWithPath(currentDir);
-
-        printf("%s%s@%s:%s%s$ %s", COLOR_DARK_PURPLE, pw->pw_name, hostName, COLOR_TEAL, currentDir, COLOR_RESET);
+        getPromptInfo(username, hostName, currentDir);
+        printf("%s%s@%s:%s%s$ %s", COLOR_DARK_PURPLE, username, hostName, COLOR_TEAL, currentDir, COLOR_RESET);
 
         if (fgets(input, MAX_INPUT_SIZE, stdin) == NULL)
         {
