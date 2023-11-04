@@ -4,10 +4,30 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <pwd.h>
 
 #include "directory.h"
 
 #define MAX_INPUT_SIZE 1024
+
+// ANSI escape codes for text color
+#define COLOR_DARK_PURPLE "\033[38;5;53m"
+#define COLOR_TEAL "\033[38;5;30m"
+#define COLOR_RESET "\033[0m"
+
+// function to replace home directory with ~ in the path
+void replaceHomeWithPath(char *path)
+{
+    struct passwd *pw = getpwuid(getuid());
+    const char *homeDir = pw->pw_dir;
+    size_t homeDirLen = strlen(homeDir);
+
+    if (strncmp(path, homeDir, homeDirLen) == 0)
+    {
+        memmove(path, "~", 1);
+        memmove(path + 1, path + homeDirLen, strlen(path) - homeDirLen + 1);
+    }
+}
 
 int main()
 {
@@ -22,7 +42,9 @@ int main()
             break;
         }
 
-        printf("da-shell:~%s$ ", currentDir);
+        replaceHomeWithPath(currentDir);
+
+        printf("%sda-shell:%s%s$ %s", COLOR_DARK_PURPLE, COLOR_TEAL, currentDir, COLOR_RESET);
 
         if (fgets(input, MAX_INPUT_SIZE, stdin) == NULL)
         {
