@@ -109,6 +109,22 @@ int main()
             {
                 ps_command();
             }
+            else if (strcmp(tokens[0], "kill") == 0)
+            {
+                // check if there are enough arguments
+                if (tokenCount < 3)
+                {
+                    printf("Usage: kill <pid> <signal>\n");
+                }
+                else
+                {
+                    // extract PID and signal from user input
+                    int pid = atoi(tokens[1]);
+                    int signal = atoi(tokens[2]);
+
+                    kill_command(pid, signal);
+                }
+            }
             else
             {
                 // Handle other commands using execvp

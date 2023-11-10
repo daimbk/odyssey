@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <signal.h>
 
 #define PATH_MAX_LENGTH 512
 
@@ -73,4 +74,16 @@ void ps_command()
 
     // close the /proc directory
     closedir(proc_dir);
+}
+
+void kill_command(int pid, int signal)
+{
+    if (kill(pid, signal) == -1)
+    {
+        perror("Error: kill");
+    }
+    else
+    {
+        printf("Process with PID %d killed\n", pid);
+    }
 }
