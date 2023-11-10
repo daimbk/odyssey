@@ -7,6 +7,7 @@
 
 #include "directory.h"
 #include "prompt.h"
+#include "system_commands.h"
 
 #define MAX_INPUT_SIZE 1024
 
@@ -104,10 +105,9 @@ int main()
                     }
                 }
             }
-            else if (strcmp(tokens[0], "exit") == 0)
+            else if (strcmp(tokens[0], "ps") == 0)
             {
-                printf("Exiting Shell..\n");
-                exit(0);
+                ps_command();
             }
             else
             {
