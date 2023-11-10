@@ -3,8 +3,4 @@
 
 int changeDirectory(const char *path);
 
-int createDirectory(const char *path);
-
-int deleteDirectory(const char *path);
-
 #endif

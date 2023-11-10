@@ -74,51 +74,16 @@ int main()
                     }
                 }
             }
-            else if (strcmp(tokens[0], "mkdir") == 0)
-            {
-                if (tokenCount < 2)
-                {
-                    // Handle error, not enough arguments
-                    printf("Usage: mkdir <directory_name>\n");
-                }
-                else
-                {
-                    if (createDirectory(tokens[1]) != 0)
-                    {
-                        perror("Error: mkdir");
-                    }
-                }
-            }
-            else if (strcmp(tokens[0], "rmdir") == 0)
-            {
-                if (tokenCount < 2)
-                {
-                    // Handle error, not enough arguments
-                    printf("Usage: rmdir <directory_name>\n");
-                }
-                else
-                {
-                    if (deleteDirectory(tokens[1]) != 0)
-                    {
-                        perror("Error: rmdir");
-                    }
-                }
-            }
-            else if (strcmp(tokens[0], "exit") == 0)
-            {
-                printf("Exiting Shell..\n");
-                exit(0);
-            }
             else
             {
-                // Handle other commands using execvp
-                // Create a child process
+                // handle other commands using execvp
+                // create a child process
                 pid_t child_pid = fork();
 
                 if (child_pid == -1)
                 {
-                    perror("Error: Fork Failed");
-                    exit(1);
+                    perror("Error: Fork failed");
+                    exit(EXIT_FAILURE);
                 }
 
                 if (child_pid == 0)
@@ -130,15 +95,15 @@ int main()
 
                     if (execvp(tokens[0], tokens) == -1)
                     {
-                        perror("Error: execvp");
-                        exit(1);
+                        perror("Error executing command");
+                        exit(EXIT_FAILURE);
                     }
                 }
                 else
                 {
                     // Parent process
 
-                    // Wait for the child to finish
+                    // wait for the child to finish
                     int status;
                     waitpid(child_pid, &status, 0);
                 }
