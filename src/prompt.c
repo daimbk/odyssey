@@ -2,6 +2,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <limits.h>
+#include <readline/history.h>
+#include <readline/readline.h>
 #include "prompt.h"
 
 void getPromptInfo(char *username, char *hostname, char *currentDir)
@@ -33,4 +35,19 @@ void replaceHomeWithPath(char *path)
         memmove(path, "~", 1);
         memmove(path + 1, path + homeDirLen, strlen(path) - homeDirLen + 1);
     }
+}
+
+char *getCommandFromHistory(int index)
+{
+    HIST_ENTRY *entry = history_get(index);
+    if (entry)
+    {
+        return entry->line;
+    }
+    return NULL;
+}
+
+void initializeHistory()
+{
+    using_history();
 }

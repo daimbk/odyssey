@@ -4,7 +4,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <string.h>
-
 #include "directory.h"
 #include "prompt.h"
 
@@ -12,23 +11,30 @@
 
 int main()
 {
-    char input[MAX_INPUT_SIZE];
     char currentDir[PATH_MAX];
     char hostName[HOST_NAME_MAX];
     char username[LOGIN_NAME_MAX];
 
+    initializeHistory(); // Initialize command history
+
     while (1)
     {
         getPromptInfo(username, hostName, currentDir);
-        printf("%s%s@%s:%s%s$ %s", COLOR_LIGHT_PURPLE, username, hostName, COLOR_CYAN, currentDir, COLOR_RESET);
+        char *prompt = malloc(MAX_INPUT_SIZE + 50); // Add extra space for the prompt
+        sprintf(prompt, "%s%s@%s:%s%s$ %s", COLOR_LIGHT_PURPLE, username, hostName, COLOR_CYAN, currentDir, COLOR_RESET);
 
-        if (fgets(input, MAX_INPUT_SIZE, stdin) == NULL)
+        char *input = readline(prompt); // Use readline for input
+        free(prompt);
+
+        if (input == NULL)
         {
             break;
         }
 
-        // remove the newline character at the end of the input
-        input[strcspn(input, "\n")] = '\0';
+        // If the input is not empty, add it to history
+        if (strlen(input) > 0) {
+            add_history(input);
+        }
 
         // declare an array to store tokens
         char *tokens[MAX_INPUT_SIZE];
@@ -52,7 +58,8 @@ int main()
         if (tokenCount == 1 && strcmp(tokens[0], "exit") == 0)
         {
             printf("Exiting Shell..\n");
-            exit(0);
+            free(input);
+            break;
         }
 
         if (tokenCount > 0)
@@ -107,7 +114,8 @@ int main()
             else if (strcmp(tokens[0], "exit") == 0)
             {
                 printf("Exiting Shell..\n");
-                exit(0);
+                free(input);
+                break;
             }
             else
             {
@@ -118,6 +126,7 @@ int main()
                 if (child_pid == -1)
                 {
                     perror("Error: Fork Failed");
+                    free(input);
                     exit(1);
                 }
 
@@ -131,6 +140,7 @@ int main()
                     if (execvp(tokens[0], tokens) == -1)
                     {
                         perror("Error: execvp");
+                        free(input);
                         exit(1);
                     }
                 }
@@ -144,6 +154,8 @@ int main()
                 }
             }
         }
+
+        free(input);
     }
 
     return 0;

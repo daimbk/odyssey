@@ -1,6 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -g
 INCLUDES = -Iinclude
+LIBS = -lreadline
 
 SRC_DIR = src
 BUILD_DIR = build
@@ -17,7 +18,7 @@ EXECUTABLE = shell
 all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJ_FILES)
-	$(CC) $(CFLAGS) -o $(EXECUTABLE) $(OBJ_FILES)
+	$(CC) $(CFLAGS) -o $(EXECUTABLE) $(OBJ_FILES) $(LIBS)
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
