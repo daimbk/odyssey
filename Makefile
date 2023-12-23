@@ -15,7 +15,10 @@ OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRC_FILES))
 # Your executable name
 EXECUTABLE = shell
 
-.PHONY: clean
+# Dependencies for installing required tools
+INSTALL_DEPS = build-essential zip unzip make libreadline-dev
+
+.PHONY: all install clean
 
 all: $(EXECUTABLE)
 
@@ -27,6 +30,10 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
+
+install:
+	# Install necessary tools using the package manager
+	sudo apt-get install -y $(INSTALL_DEPS)
 
 clean:
 	rm -f $(EXECUTABLE) $(OBJ_FILES)
