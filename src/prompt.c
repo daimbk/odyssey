@@ -2,8 +2,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <limits.h>
-#include <readline/history.h>
-#include <readline/readline.h>
 #include "prompt.h"
 
 void getPromptInfo(char *username, char *hostname, char *currentDir)

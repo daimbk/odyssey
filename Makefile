@@ -15,6 +15,8 @@ OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRC_FILES))
 # Your executable name
 EXECUTABLE = shell
 
+.PHONY: clean
+
 all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJ_FILES)
