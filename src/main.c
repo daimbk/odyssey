@@ -213,6 +213,34 @@ int main()
                     }
                 }
             }
+            else if (strcmp(tokens[0], "zip") == 0)
+            {
+                if (tokenCount < 3)
+                {
+                    printf("Usage: zip <folder_path> <zip_file_name>\n");
+                }
+                else
+                {
+                    if (compressFolder(tokens[1], tokens[2]) != 0)
+                    {
+                        perror("Error: zip");
+                    }
+                }
+            }
+            else if (strcmp(tokens[0], "unzip") == 0)
+            {
+                if (tokenCount < 3)
+                {
+                    printf("Usage: unzip <zip_file_path> <extract_path>\n");
+                }
+                else
+                {
+                    if (decompressZip(tokens[1], tokens[2]) != 0)
+                    {
+                        perror("Error: unzip");
+                    }
+                }
+            }
             else if (strcmp(tokens[0], "exit") == 0)
             {
                 printf("Exiting Shell..\n");

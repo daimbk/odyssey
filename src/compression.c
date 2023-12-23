@@ -46,3 +46,19 @@ int decompressFile(const char *filePath)
 
     return executeCommand(command);
 }
+
+int compressFolder(const char *folderPath, const char *zipFilePath)
+{
+    char command[PATH_MAX + PATH_MAX + 50]; // Maximum command length: "zip -r zipFileName folderPath"
+    snprintf(command, sizeof(command), "zip -r %s %s", zipFilePath, folderPath);
+
+    return executeCommand(command);
+}
+
+int decompressZip(const char *zipFilePath, const char *extractPath)
+{
+    char command[PATH_MAX + PATH_MAX + 50]; // Maximum command length: "unzip -d extractPath zipFileName"
+    snprintf(command, sizeof(command), "unzip -d %s %s", extractPath, zipFilePath);
+
+    return executeCommand(command);
+}
