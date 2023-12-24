@@ -16,7 +16,7 @@ OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRC_FILES))
 EXECUTABLE = shell
 
 # Dependencies for installing required tools
-INSTALL_DEPS = build-essential zip unzip make libreadline-dev
+INSTALL_DEPS = build-essential zip unzip libreadline-dev
 
 .PHONY: all install clean
 
