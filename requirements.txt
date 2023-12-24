@@ -1,0 +1,5 @@
+build-essential
+zip
+unzip
+make
+libreadline-dev

@@ -10,8 +10,12 @@
 #define COLOR_RESET "\033[0m"
 
 #include <pwd.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
 void getPromptInfo(char *username, char *hostname, char *currentDir);
 void replaceHomeWithPath(char *path);
+char *getCommandFromHistory(int index);
+void initializeHistory();
 
 #endif
