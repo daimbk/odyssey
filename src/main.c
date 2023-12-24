@@ -4,6 +4,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <string.h>
+
 #include "directory.h"
 #include "prompt.h"
 #include "autocomplete.h"
@@ -249,8 +250,8 @@ int main()
             }
             else
             {
-                // Handle other commands using execvp
-                // Create a child process
+                // handle other commands using execvp
+                // create a child process
                 pid_t child_pid = fork();
 
                 if (child_pid == -1)
@@ -269,7 +270,7 @@ int main()
 
                     if (execvp(tokens[0], tokens) == -1)
                     {
-                        perror("Error: execvp");
+                        perror("Error executing command");
                         free(input);
                         exit(1);
                     }
@@ -278,7 +279,7 @@ int main()
                 {
                     // Parent process
 
-                    // Wait for the child to finish
+                    // wait for the child to finish
                     int status;
                     waitpid(child_pid, &status, 0);
                 }
