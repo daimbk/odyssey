@@ -34,3 +34,18 @@ void replaceHomeWithPath(char *path)
         memmove(path + 1, path + homeDirLen, strlen(path) - homeDirLen + 1);
     }
 }
+
+char *getCommandFromHistory(int index)
+{
+    HIST_ENTRY *entry = history_get(index);
+    if (entry)
+    {
+        return entry->line;
+    }
+    return NULL;
+}
+
+void initializeHistory()
+{
+    using_history();
+}
