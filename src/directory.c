@@ -9,6 +9,7 @@
 #include <libgen.h>
 #include <limits.h>
 
+#include "globals.h"
 #include "directory.h"
 
 int changeDirectory(const char *path)
@@ -101,7 +102,6 @@ int recursiveDelete(const char *path)
     return 0;
 }
 
-
 // Function to check if the path is a directory
 int isDirectory(const char *path)
 {
@@ -163,7 +163,6 @@ int copyRecursive(const char *sourcePath, const char *destinationPath)
     closedir(sourceDir);
     return 0;
 }
-
 
 int copyFile(const char *sourcePath, const char *destinationPath)
 {

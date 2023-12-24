@@ -3,7 +3,10 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <limits.h> 
+#include <limits.h>
+
+#include "globals.h"
+#include "compression.h"
 
 int executeCommand(const char *command)
 {
