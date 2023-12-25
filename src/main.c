@@ -9,6 +9,8 @@
 #include "prompt.h"
 #include "autocomplete.h"
 #include "compression.h"
+#include "redirection.h"
+#include "pipes.h"
 
 #define MAX_INPUT_SIZE 1024
 
@@ -36,7 +38,8 @@ int main()
         }
 
         // If the input is not empty, add it to history
-        if (strlen(input) > 0) {
+        if (strlen(input) > 0)
+        {
             add_history(input);
         }
 
@@ -56,8 +59,23 @@ int main()
             token = strtok(NULL, " ");
         }
 
-        // handle commands
+        // find the index of redirection and pipe symbols
+        int redirIndex = findRedirection(tokens, tokenCount);
+        int pipeIndex = findPipe(tokens, tokenCount);
 
+        // handle input/output redirection
+        if (redirIndex != -1)
+        {
+            handle_redirection(tokens, redirIndex, tokenCount);
+        }
+
+        // handle pipes
+        if (pipeIndex != -1)
+        {
+            handle_pipe(tokens, pipeIndex, tokenCount);
+        }
+
+        // handle commands
         // quit shell on "exit" command
         if (tokenCount == 1 && strcmp(tokens[0], "exit") == 0)
         {
