@@ -1,55 +1,45 @@
-#include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <dirent.h>
+#include <unistd.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
-#include "prompt.h"
 #include "autocomplete.h"
+#include "prompt.h"
 
-static char *completions[] = {
-    "ls",
-    "cd",
-    "mkdir",
-    "rmdir",
-    "exit",
-    // Add more completions as needed
-    NULL // Mark the end of the list
-};
-
-char *get_completion(int index)
+char **autocomplete_generator(const char *text, int start, int end)
 {
-    if (completions[index] != NULL)
+    // NULL-terminate the input string for compatibility
+    char *partialInput = NULL;
+    if (start == 0)
     {
-        return completions[index];
+        partialInput = strdup("");
     }
     else
     {
-        return NULL;
+        partialInput = strndup(text, end);
     }
-}
 
-char *autocomplete_generator(const char *text, int state)
-{
-    static int list_index, len;
-    char *name;
+    // Get the matches based on the partial input
+    char **matches = NULL;
 
-    // On the first call, initialize variables
-    if (!state)
+    // Customize this part to provide more dynamic completion suggestions
+    if (strcmp(partialInput, "") != 0)
     {
-        list_index = 0;
-        len = strlen(text);
+        // Suggest commands from history
+        matches = rl_completion_matches(partialInput, (rl_compentry_func_t *)getCommandFromHistory);
     }
-
-    // Iterate through your list of possible completions
-    while ((name = get_completion(list_index++)) != NULL)
+    else
     {
-        if (strncmp(name, text, len) == 0)
-        {
-            // Return the matched completion
-            return strdup(name);
-        }
+        // Suggest files and directories from the current path
+        matches = rl_completion_matches(partialInput, (rl_compentry_func_t *)rl_filename_completion_function);
+
     }
 
-    // No more completions
-    return NULL;
+    // Clean up
+    free(partialInput);
+
+    return matches;
 }

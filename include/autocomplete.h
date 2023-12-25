@@ -1,7 +1,7 @@
 #ifndef AUTOCOMPLETE_H
 #define AUTOCOMPLETE_H
 
-char *get_completion(int index);
-char *autocomplete_generator(const char *text, int state);
+// Function to generate tab completion suggestions
+char **autocomplete_generator(const char *text, int start, int end);
 
 #endif
