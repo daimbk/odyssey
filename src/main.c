@@ -19,14 +19,13 @@ int main()
     char username[LOGIN_NAME_MAX];
 
     initializeHistory(); // Initialize command history
+    rl_attempted_completion_function = (rl_completion_func_t *)autocomplete_generator;
 
     while (1)
     {
         getPromptInfo(username, hostName, currentDir);
         char *prompt = malloc(MAX_INPUT_SIZE + 50); // Add extra space for the prompt
         sprintf(prompt, "%s%s@%s:%s%s$ %s", COLOR_LIGHT_PURPLE, username, hostName, COLOR_CYAN, currentDir, COLOR_RESET);
-
-        rl_attempted_completion_function = (rl_completion_func_t *)autocomplete_generator;
 
         char *input = readline(prompt); // Use readline for input
         free(prompt);
@@ -152,7 +151,7 @@ int main()
                 }
                 else
                 {
-                    if (deleteFile(tokens[1]) != 0)
+                    if (recursiveDelete(tokens[1]) != 0)
                     {
                         perror("Error: rm");
                     }

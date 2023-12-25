@@ -266,7 +266,7 @@ int moveFile(const char *sourcePath, const char *destinationPath)
             }
         }
 
-        if (deleteFile(sourcePath) != 0)
+        if (recursiveDelete(sourcePath) != 0)
         {
             perror("Error: moveFile (delete)");
             return -1;

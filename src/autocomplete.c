@@ -24,6 +24,7 @@ char **autocomplete_generator(const char *text, int start, int end)
 
     // Get the matches based on the partial input
     char **matches = NULL;
+    //printf("Partial Input: \"%s\"\n", partialInput);
 
     // Customize this part to provide more dynamic completion suggestions
     if (strcmp(partialInput, "") != 0)
@@ -35,7 +36,6 @@ char **autocomplete_generator(const char *text, int start, int end)
     {
         // Suggest files and directories from the current path
         matches = rl_completion_matches(partialInput, (rl_compentry_func_t *)rl_filename_completion_function);
-
     }
 
     // Clean up
