@@ -20,16 +20,16 @@ int main()
     char hostName[HOST_NAME_MAX];
     char username[LOGIN_NAME_MAX];
 
-    initializeHistory(); // Initialize command history
+    initializeHistory(); // initialize command history
     rl_attempted_completion_function = (rl_completion_func_t *)autocomplete_generator;
 
     while (1)
     {
         getPromptInfo(username, hostName, currentDir);
-        char *prompt = malloc(MAX_INPUT_SIZE + 50); // Add extra space for the prompt
+        char *prompt = malloc(MAX_INPUT_SIZE + 50); // add extra space for the prompt
         sprintf(prompt, "%s%s@%s:%s%s$ %s", COLOR_LIGHT_PURPLE, username, hostName, COLOR_CYAN, currentDir, COLOR_RESET);
 
-        char *input = readline(prompt); // Use readline for input
+        char *input = readline(prompt);
         free(prompt);
 
         if (input == NULL)
@@ -37,18 +37,17 @@ int main()
             break;
         }
 
-        // If the input is not empty, add it to history
+        // if the input is not empty, add it to history
         if (strlen(input) > 0)
         {
             add_history(input);
         }
 
-        // declare an array to store tokens
         char *tokens[MAX_INPUT_SIZE];
 
         // tokenize input
         char *token = strtok(input, " ");
-        int tokenCount = 0; // to keep track of the number of tokens
+        int tokenCount = 0;
 
         while (token != NULL)
         {
@@ -107,7 +106,6 @@ int main()
             {
                 if (tokenCount < 2)
                 {
-                    // Handle error, not enough arguments
                     printf("Usage: mkdir <directory_name>\n");
                 }
                 else
@@ -122,7 +120,6 @@ int main()
             {
                 if (tokenCount < 2)
                 {
-                    // Handle error, not enough arguments
                     printf("Usage: rmdir <directory_name>\n");
                 }
                 else

@@ -31,7 +31,6 @@ void handle_redirection(char **tokens, int redirIndex, int tokenCount)
         exit(EXIT_FAILURE);
     }
 
-    // create a child process
     if ((child_pid = fork()) == -1)
     {
         perror("Fork failed");
@@ -57,10 +56,10 @@ void handle_redirection(char **tokens, int redirIndex, int tokenCount)
         }
     }
 
-    // Close the file descriptor in the parent
+    // close the file descriptor in the parent
     close(fd);
 
-    // Wait for the child process to finish
+    // wait for the child process to finish
     waitpid(child_pid, NULL, 0);
 }
 

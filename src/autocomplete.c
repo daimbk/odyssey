@@ -22,23 +22,22 @@ char **autocomplete_generator(const char *text, int start, int end)
         partialInput = strndup(text, end);
     }
 
-    // Get the matches based on the partial input
+    // get the matches based on the partial input
     char **matches = NULL;
-    //printf("Partial Input: \"%s\"\n", partialInput);
+    // printf("Partial Input: \"%s\"\n", partialInput);
 
-    // Customize this part to provide more dynamic completion suggestions
+    // customize this part to provide more dynamic completion suggestions
     if (strcmp(partialInput, "") != 0)
     {
-        // Suggest commands from history
+        // suggest commands from history
         matches = rl_completion_matches(partialInput, (rl_compentry_func_t *)getCommandFromHistory);
     }
     else
     {
-        // Suggest files and directories from the current path
+        // suggest files and directories from the current path
         matches = rl_completion_matches(partialInput, (rl_compentry_func_t *)rl_filename_completion_function);
     }
 
-    // Clean up
     free(partialInput);
 
     return matches;

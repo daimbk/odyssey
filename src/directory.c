@@ -102,7 +102,7 @@ int recursiveDelete(const char *path)
     return 0;
 }
 
-// Function to check if the path is a directory
+// function to check if the path is a directory
 int isDirectory(const char *path)
 {
     struct stat pathStat;
@@ -113,7 +113,7 @@ int isDirectory(const char *path)
     return 0;
 }
 
-// Recursive function to copy files and directories
+// recursive function to copy files and directories
 int copyRecursive(const char *sourcePath, const char *destinationPath)
 {
     DIR *sourceDir;
@@ -169,13 +169,13 @@ int copyFile(const char *sourcePath, const char *destinationPath)
     struct stat destStat;
     if (stat(destinationPath, &destStat) == 0 && S_ISDIR(destStat.st_mode))
     {
-        // Destination is a directory, construct the new path
+        // destination is a directory, construct the new path
         char destFile[PATH_MAX];
         snprintf(destFile, sizeof(destFile), "%s/%s", destinationPath, basename(strdup(sourcePath)));
 
         if (isDirectory(sourcePath))
         {
-            // If source is a directory, create a new directory in the destination
+            // if source is a directory, create a new directory in the destination
             if (mkdir(destFile, 0777) != 0)
             {
                 perror("Error: mkdir");
@@ -188,7 +188,7 @@ int copyFile(const char *sourcePath, const char *destinationPath)
         }
         else
         {
-            // If source is a file, perform regular file copy
+            // if source is a file, perform regular file copy
             if (copyFile(sourcePath, destFile) != 0)
             {
                 return -1;
@@ -197,7 +197,7 @@ int copyFile(const char *sourcePath, const char *destinationPath)
     }
     else
     {
-        // Destination is a file
+        // destination is a file
         int sourceFile, destFile;
         char buffer[4096];
         ssize_t bytesRead;
@@ -240,13 +240,13 @@ int moveFile(const char *sourcePath, const char *destinationPath)
     struct stat destStat;
     if (stat(destinationPath, &destStat) == 0 && S_ISDIR(destStat.st_mode))
     {
-        // Destination is a directory, construct the new path
+        // destination is a directory, construct the new path
         char newDestination[PATH_MAX];
         snprintf(newDestination, sizeof(newDestination), "%s/%s", destinationPath, basename(strdup(sourcePath)));
 
         if (isDirectory(sourcePath))
         {
-            // If source is a directory, create a new directory in the destination
+            // if source is a directory, create a new directory in the destination
             if (mkdir(newDestination, 0777) != 0)
             {
                 perror("Error: mkdir");
@@ -259,7 +259,7 @@ int moveFile(const char *sourcePath, const char *destinationPath)
         }
         else
         {
-            // If source is a file, perform regular file copy
+            // if source is a file, perform regular file copy
             if (copyFile(sourcePath, newDestination) != 0)
             {
                 return -1;
@@ -274,7 +274,7 @@ int moveFile(const char *sourcePath, const char *destinationPath)
     }
     else
     {
-        // Destination is a file
+        // destination is a file
         if (rename(sourcePath, destinationPath) != 0)
         {
             perror("Error: moveFile");
@@ -308,7 +308,6 @@ int getFileInformation(const char *path)
     printf("File Information for %s:\n", path);
     printf("Size: %ld bytes\n", fileStat.st_size);
     printf("Permissions: %o\n", fileStat.st_mode & (S_IRWXU | S_IRWXG | S_IRWXO));
-    // Add more information as needed
 
     return 0;
 }
