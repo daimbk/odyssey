@@ -35,14 +35,14 @@ $(BUILD_DIR):
 
 lint: $(LINT_FILES)
 	clang-format -i $(LINT_FILES)
-    clang-format -n $(LINT_FILES)
-    gcc -Wall -Werror $(LINT_FILES)
+    	clang-format -n $(LINT_FILES)
+    	gcc -Wall -Werror $(LINT_FILES)
 
 test: $(TEST_EXE)
-    ./$(TEST_EXE)
+    	./$(TEST_EXE)
 
 $(TEST_EXE): $(TEST_SRC)
-    $(CC) $(CFLAGS) -o $@ $^ $(LIBS)
+    	$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
 
 install:
 	# Install necessary tools using the package manager
