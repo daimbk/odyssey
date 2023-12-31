@@ -13,7 +13,9 @@
 #include <pwd.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <stdbool.h>
 
+void displayASCII(bool isEnabled);
 void getPromptInfo(char *username, char *hostname, char *currentDir);
 void replaceHomeWithPath(char *path);
 char *getCommandFromHistory(int index);
