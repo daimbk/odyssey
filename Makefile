@@ -42,7 +42,7 @@ test:
 	./$(TEST_EXE)
 
 $(TEST_EXE):
-    	$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
+	$(CC) $(CFLAGS) -o $@ $(TEST_SRC) $(LIBS)
 
 install:
 	# Install necessary tools using the package manager
