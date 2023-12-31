@@ -12,7 +12,8 @@ OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRC_FILES))
 # executable name
 EXECUTABLE = shell
 
-LINT_FILES = $(SRC_FILES)
+INCLUDE_FILES = $(wildcard include/*.h) 
+LINT_FILES = $(SRC_FILES) $(INCLUDE_FILES)
 
 TEST_SRC = test/*.c 
 TEST_EXE = test/test
