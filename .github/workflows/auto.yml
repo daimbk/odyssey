@@ -1,0 +1,72 @@
+name: CI 
+
+on:
+  push:
+    branches: [main]
+    paths:
+    - 'src/**'
+    - 'include/**'
+    - 'Makefile'
+
+  pull_request:
+    branches: [main] 
+    paths:
+    - 'src/**'
+    - 'include/**'
+    - 'Makefile'
+
+jobs:
+
+  lint:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Lint
+      run: |
+        make lint
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: |
+        make
+
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Test
+      run: |
+        make test
+
+  merge:
+
+    needs: [lint, build, test]
+    
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Block merge on failure
+      if: ${{ needs.lint.result != 'success' || needs.build.result != 'success' || needs.test.result != 'success' }}
+      run: exit 1
+
+    - name: Merge
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          github.pulls.merge({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.payload.pull_request.number  
+          })
