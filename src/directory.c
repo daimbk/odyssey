@@ -22,6 +22,14 @@ int changeDirectory(const char *path)
     return 0;
 }
 
+
+
+
+
+
+
+
+
 int createDirectory(const char *path)
 {
     if (mkdir(path, 0777) != 0)
