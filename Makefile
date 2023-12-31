@@ -13,7 +13,7 @@ OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRC_FILES))
 EXECUTABLE = shell
 
 INCLUDE_FILES = $(wildcard include/*.h) 
-LINT_FILES = $(SRC_FILES) $(INCLUDE_FILES)
+LINT_FILES = $(INCLUDE_FILES) $(SRC_FILES)
 
 TEST_SRC = test/*.c 
 TEST_EXE = test/test
