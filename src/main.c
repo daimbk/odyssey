@@ -11,11 +11,15 @@
 #include "compression.h"
 #include "redirection.h"
 #include "pipes.h"
+#include "config.h"
 
 #define MAX_INPUT_SIZE 1024
 
 int main()
 {
+    // get saved shell config
+    loadConfig();
+
     char currentDir[PATH_MAX];
     char hostName[HOST_NAME_MAX];
     char username[LOGIN_NAME_MAX];
@@ -23,9 +27,8 @@ int main()
     initializeHistory(); // initialize command history
     rl_attempted_completion_function = (rl_completion_func_t *)autocomplete_generator;
 
-    // TODO: get user configuration to keep art on or off
-    // test display on startup
-    displayASCII(true);
+    // display ascii
+    displayASCII();
 
     while (1)
     {
