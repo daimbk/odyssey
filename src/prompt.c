@@ -4,6 +4,21 @@
 #include <limits.h>
 #include "prompt.h"
 
+void displayASCII(bool isEnabled)
+{
+    if (isEnabled)
+    {
+        printf("\n\n");
+        printf("________ ________ ______.___. _________ __________________________.___.\n");
+        printf("\\_____  \\ \\______ \\__   |   |/   _____//   _____/\\_   _____/\\__   |   |\n");
+        printf(" /   |   \\ |    |  \\/   |   |\\_____  \\ \\_____  \\  |    ___)_  /   |   |\n");
+        printf("/    |    \\|    `   \\____   |/        \\/        \\ |         \\ \\____   |\n");
+        printf("\\_______  /_______  / ______/_______  /_______  / /_______  / / ______/\n");
+        printf("        \\/        \\/\\/              \\/        \\/          \\/  \\/       \n");
+        printf("\n\n");
+    }
+}
+
 void getPromptInfo(char *username, char *hostname, char *currentDir)
 {
     struct passwd *pw = getpwuid(getuid());
