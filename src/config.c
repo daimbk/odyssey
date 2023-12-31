@@ -91,3 +91,36 @@ void loadConfig()
 
     fclose(fp);
 }
+
+void toggle_ascii_art(char *cmd)
+{
+
+    char *home = getenv("HOME");
+    char config_file[256];
+    strcpy(config_file, home);
+    strcat(config_file, "/.odyssey/shellconfig.txt");
+
+    FILE *fp = fopen(config_file, "r+");
+
+    char line[64];
+    while (fgets(line, sizeof(line), fp))
+    {
+        if (strstr(line, "show_ascii_art"))
+        {
+            if (strcmp(cmd, "enable") == 0)
+            {
+                strcpy(line, "show_ascii_art=true\n");
+            }
+            else if (strcmp(cmd, "disable") == 0)
+            {
+                strcpy(line, "show_ascii_art=false\n");
+            }
+
+            fseek(fp, 0, SEEK_SET);
+            fputs(line, fp);
+            break;
+        }
+    }
+
+    fclose(fp);
+}
