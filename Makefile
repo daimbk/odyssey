@@ -1,8 +1,9 @@
 CC = gcc
 CFLAGS = -Wall -g
-INCLUDES = -Iinclude
+INCLUDES = -I$(INC_DIR)
 LIBS = -lreadline
 
+INC_DIR = include
 SRC_DIR = src
 BUILD_DIR = build
 
@@ -12,10 +13,10 @@ OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRC_FILES))
 # executable name
 EXECUTABLE = shell
 
-INCLUDE_FILES = $(wildcard include/*.h) 
-LINT_FILES = $(INCLUDE_FILES) $(SRC_FILES)
+INCLUDE_FILES = $(wildcard $(INC_DIR)/*.h)
+LINT_FILES = $(SRC_FILES) $(INCLUDE_FILES)
 
-TEST_SRC = test/*.c 
+TEST_SRC = test/*.c
 TEST_EXE = test/test
 
 # dependencies for installing required tools
