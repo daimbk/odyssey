@@ -4,10 +4,11 @@
 #include <limits.h>
 #include <sys/ioctl.h>
 #include "prompt.h"
+#include "config.h"
 
-// void displayASCII(bool isEnabled)
+// void displayASCII()
 // {
-//     if (isEnabled)
+//     if (show_ascii_art)
 //     {
 //         printf("\n\n");
 //         printf("________ ________ ______.___. _________ __________________________.___.\n");
@@ -21,12 +22,10 @@
 // }
 
 // print in horizontal center of terminal
-void displayASCII(bool isEnabled)
+void displayASCII()
 {
-
-    if (isEnabled)
+    if (show_ascii_art)
     {
-
         struct winsize w;
         ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
         int term_cols = w.ws_col;
