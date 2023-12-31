@@ -263,11 +263,16 @@ int main()
                     }
                 }
             }
-            else if (strcmp(tokens[0], "exit") == 0)
+            else if ((strcmp(tokens[0], "ascii") == 0))
             {
-                printf("Exiting Shell..\n");
-                free(input);
-                break;
+                if ((tokenCount != 2) || (strcmp(tokens[1], "enable") != 0 && strcmp(tokens[1], "disable") != 0))
+                {
+                    printf("Usage: ascii <enable OR disable>\n");
+                }
+                else
+                {
+                    toggle_ascii_art(tokens[1]);
+                }
             }
             else
             {
