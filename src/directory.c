@@ -42,12 +42,6 @@ int deleteDirectory(const char *path)
     return 0;
 }
 
-
-
-
-
-
-
 int deleteFile(const char *path)
 {
     if (remove(path) != 0)
