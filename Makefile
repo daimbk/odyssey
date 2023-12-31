@@ -41,7 +41,7 @@ lint:
 test:
 	./$(TEST_EXE)
 
-$(TEST_EXE): $(TEST_SRC)
+$(TEST_EXE):
     	$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
 
 install:
