@@ -23,6 +23,10 @@ int main()
     initializeHistory(); // initialize command history
     rl_attempted_completion_function = (rl_completion_func_t *)autocomplete_generator;
 
+    // TODO: get user configuration to keep art on or off
+    // test display on startup
+    displayASCII(true);
+
     while (1)
     {
         getPromptInfo(username, hostName, currentDir);
