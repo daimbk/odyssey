@@ -25,21 +25,21 @@ INSTALL_DEPS = build-essential zip unzip libreadline-dev
 all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJ_FILES)
-	$(CC) $(CFLAGS) -o $(EXECUTABLE) $(OBJ_FILES) $(LIBS)
+    $(CC) $(CFLAGS) -o $(EXECUTABLE) $(OBJ_FILES) $(LIBS)
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
-	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
+    $(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 
 $(BUILD_DIR):
-	mkdir -p $(BUILD_DIR)
+    mkdir -p $(BUILD_DIR)
 
 lint: $(LINT_FILES)
-	clang-format -i $(LINT_FILES)
-    	clang-format -n $(LINT_FILES)
-    	gcc -Wall -Werror $(LINT_FILES)
+    clang-format -i $(LINT_FILES)
+    clang-format -n $(LINT_FILES)
+    gcc -Wall -Werror $(LINT_FILES)
 
 test: $(TEST_EXE)
-    	./$(TEST_EXE)
+    ./$(TEST_EXE)
 
 $(TEST_EXE): $(TEST_SRC)
     	$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
