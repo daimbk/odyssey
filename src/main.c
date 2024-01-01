@@ -13,6 +13,8 @@
 #include "pipes.h"
 #include "config.h"
 #include "job_control.h"
+#include <processinfo.h>
+#include <sysinfo.h>
 
 #define MAX_INPUT_SIZE 1024
 
@@ -265,6 +267,29 @@ int main()
                     {
                         perror("Error: unzip");
                     }
+                }
+            }
+            else if (strcmp(tokens[0], "psinfo") == 0)
+            {
+                if (tokenCount != 2)
+                {
+                    fprintf(stderr, "Usage: psinfo <PID>\n");
+                }
+                else
+                {
+                    display_process_info(tokens[1]);
+                }
+                continue; // Skip the rest of the shell logic for this command
+            }
+            else if (strcmp(tokens[0], "sysinfo") == 0)
+            {
+                if (tokenCount != 2)
+                {
+                    fprintf(stderr, "Usage: sysinfo <top N processes>\n");
+                }
+                else
+                {
+                    display_system_info(tokens[1]);
                 }
             }
             else if (strcmp(tokens[0], "exit") == 0)
