@@ -12,6 +12,7 @@
 #include "redirection.h"
 #include "pipes.h"
 #include "config.h"
+#include "job_control.h"
 
 #define MAX_INPUT_SIZE 1024
 
@@ -19,6 +20,9 @@ int main()
 {
     // get saved shell config
     loadConfig();
+
+    // setup job control signals
+    setup_signal_handlers();
 
     char currentDir[PATH_MAX];
     char hostName[HOST_NAME_MAX];
@@ -289,9 +293,9 @@ int main()
 
                 if (child_pid == 0)
                 {
-                    // Child process
+                    // child process
 
-                    // Null-terminate the tokens array
+                    // null-terminate the tokens array
                     tokens[tokenCount] = NULL;
 
                     if (execvp(tokens[0], tokens) == -1)
@@ -303,11 +307,17 @@ int main()
                 }
                 else
                 {
-                    // Parent process
+                    // parent process
+                    foreground = child_pid; // set the current foreground process PID
 
                     // wait for the child to finish
                     int status;
-                    waitpid(child_pid, &status, 0);
+                    waitpid(child_pid, &status, WUNTRACED);
+                    if (WIFSTOPPED(status))
+                    {
+                        // the child process was stopped by Ctrl+Z
+                        foreground = -1; // reset current foreground process PID
+                    }
                 }
             }
         }
