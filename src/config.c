@@ -78,15 +78,23 @@ void loadConfig()
 
     // ---------LOAD CONFIG FROM FILE----------
     char setting[64];
-    fscanf(fp, "show_ascii_art=%s", setting);
+    char line[128];
 
-    if (strcmp(setting, "true") == 0)
+    while (fgets(line, sizeof(line), fp))
     {
-        show_ascii_art = true;
-    }
-    else
-    {
-        show_ascii_art = false;
+        if (strstr(line, "show_ascii_art"))
+        {
+            sscanf(line, "show_ascii_art=%s", setting);
+
+            if (strcmp(setting, "true") == 0)
+            {
+                show_ascii_art = true;
+            }
+            else
+            {
+                show_ascii_art = false;
+            }
+        }
     }
 
     fclose(fp);
@@ -107,17 +115,17 @@ void toggle_ascii_art(char *cmd)
     {
         if (strstr(line, "show_ascii_art"))
         {
+            fseek(fp, -strlen(line), SEEK_CUR);
+            fputs("show_ascii_art=", fp);
+
             if (strcmp(cmd, "enable") == 0)
             {
-                strcpy(line, "show_ascii_art=true\n");
+                fputs("true\n", fp);
             }
-            else if (strcmp(cmd, "disable") == 0)
+            else
             {
-                strcpy(line, "show_ascii_art=false\n");
+                fputs("false\n", fp);
             }
-
-            fseek(fp, 0, SEEK_SET);
-            fputs(line, fp);
             break;
         }
     }
