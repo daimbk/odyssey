@@ -288,9 +288,9 @@ int main()
 
                 if (child_pid == 0)
                 {
-                    // Child process
+                    // child process
 
-                    // Null-terminate the tokens array
+                    // null-terminate the tokens array
                     tokens[tokenCount] = NULL;
 
                     if (execvp(tokens[0], tokens) == -1)
@@ -302,16 +302,16 @@ int main()
                 }
                 else
                 {
-                    // Parent process
-                    foreground = child_pid; // Set the current foreground process PID
+                    // parent process
+                    foreground = child_pid; // set the current foreground process PID
 
                     // wait for the child to finish
                     int status;
                     waitpid(child_pid, &status, WUNTRACED);
                     if (WIFSTOPPED(status))
                     {
-                        // The child process was stopped by Ctrl+Z
-                        foreground = -1; // Reset current foreground process PID
+                        // the child process was stopped by Ctrl+Z
+                        foreground = -1; // reset current foreground process PID
                     }
                 }
             }
