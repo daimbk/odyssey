@@ -4,6 +4,7 @@
 #include <sys/types.h>
 
 extern pid_t foreground;
+extern volatile int exit_flag;
 
 void setup_signal_handlers();
 void handle_sigchld(int signo);
