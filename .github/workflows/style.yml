@@ -22,7 +22,7 @@ jobs:
     - name: Format Code
       run: |
         # use git to find changed C and header files in the last commit
-        files_changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '\.c$|\.h$')
+        files_changed=$(git diff --name-only HEAD^ HEAD | grep -E '\.c$|\.h$')
 
         # check if there are any changes
         if [ -n "$files_changed" ]; then
