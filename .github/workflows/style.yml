@@ -1,0 +1,35 @@
+name: Format Code
+
+on:
+  push:
+    paths:
+      - 'include/**/*'
+      - 'src/**/*'
+
+jobs:
+  format-code:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Install clang-format
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y clang-format
+
+    - name: Format Code
+      run: |
+        # use git to find changed C and header files in the last commit
+        files_changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '\.c$|\.h$')
+
+        # check if there are any changes
+        if [ -n "$files_changed" ]; then
+          # Run clang-format on changed files
+          clang-format -i -style=file $files_changed
+
+          # stage changes and commit
+          git add $files_changed
+          git commit -m "actions: apply clang-format"
+        fi
