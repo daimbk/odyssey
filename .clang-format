@@ -5,6 +5,5 @@ TabWidth: 4
 BreakBeforeBraces: Linux
 AllowShortIfStatementsOnASingleLine: false
 ColumnLimit: 150
-AlwaysBreakAfterDefinitionReturnType: All
+AlwaysBreakAfterDefinitionReturnType: None
 CommentPragmas: '^ IWYU pragma:'
-PointerAlignment: Right
