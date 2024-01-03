@@ -1,0 +1,10 @@
+BasedOnStyle: GNU
+IndentWidth: 4
+UseTab: true
+TabWidth: 4
+BreakBeforeBraces: Linux
+AllowShortIfStatementsOnASingleLine: false
+ColumnLimit: 150
+AlwaysBreakAfterDefinitionReturnType: All
+CommentPragmas: '^ IWYU pragma:'
+PointerAlignment: Right
