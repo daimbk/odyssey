@@ -1,0 +1,10 @@
+BasedOnStyle: Google
+IndentWidth: 8
+UseTab: true
+TabWidth: 8
+BreakBeforeBraces: Linux
+AllowShortIfStatementsOnASingleLine: false
+ColumnLimit: 150
+AlwaysBreakAfterDefinitionReturnType: None
+CommentPragmas: '^[[:space:]]*iwyu pragma:'
+PointerAlignment: Middle

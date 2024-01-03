@@ -3,22 +3,21 @@ CFLAGS = -Wall -g
 INCLUDES = -Iinclude
 LIBS = -lreadline
 
+INCLUDE_DIR = include
 SRC_DIR = src
 BUILD_DIR = build
 
-# List of source files
+# source files
+INCLUDE_FILES = $(wildcard $(INCLUDE_DIR)/*.h)
 SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
-
-# List of object files
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRC_FILES))
 
-# Your executable name
-EXECUTABLE = shell
+EXECUTABLE = odyssey
 
-# Dependencies for installing required tools
-INSTALL_DEPS = build-essential zip unzip libreadline-dev
+# dependencies
+INSTALL_DEPS = build-essential zip unzip libreadline-dev clang-format
 
-.PHONY: all install clean
+.PHONY: all install clean format
 
 all: $(EXECUTABLE)
 
@@ -34,6 +33,9 @@ $(BUILD_DIR):
 install:
 	# Install necessary tools using the package manager
 	sudo apt-get install -y $(INSTALL_DEPS)
+
+format:
+	clang-format -i $(INCLUDE_FILES) $(SRC_FILES)
 
 clean:
 	rm -f $(EXECUTABLE) $(OBJ_FILES)
