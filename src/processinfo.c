@@ -5,20 +5,20 @@
 
 void display_process_info(char *pid)
 {
-    // File paths for various information
+    // file paths for various information
     char status_path[MAX_PATH_LEN];
     char cmdline_path[MAX_PATH_LEN];
     char fd_path[MAX_PATH_LEN];
 
-    // Construct file paths
+    // construct file paths
     snprintf(status_path, MAX_PATH_LEN, "/proc/%s/status", pid);
     snprintf(cmdline_path, MAX_PATH_LEN, "/proc/%s/cmdline", pid);
     snprintf(fd_path, MAX_PATH_LEN, "/proc/%s/fd", pid);
 
-    // Display process ID
+    // display process ID
     printf("Process ID (PID): %s\n", pid);
 
-    // Read and display parent process ID
+    // read and display parent process ID
     char parent_pid[MAX_PATH_LEN];
     FILE *status_file = fopen(status_path, "r");
     if (status_file != NULL)
@@ -40,7 +40,7 @@ void display_process_info(char *pid)
         exit(EXIT_FAILURE);
     }
 
-    // Read and display command line
+    // read and display command line
     char cmdline[MAX_CMDLINE_LEN];
     FILE *cmdline_file = fopen(cmdline_path, "r");
     if (cmdline_file != NULL)
@@ -48,7 +48,7 @@ void display_process_info(char *pid)
         size_t bytesRead = fread(cmdline, 1, sizeof(cmdline) - 1, cmdline_file);
         if (bytesRead > 0)
         {
-            cmdline[bytesRead] = '\0'; // Ensure null-termination
+            cmdline[bytesRead] = '\0'; // ensure null-termination
             fclose(cmdline_file);
             printf("Command Line: %s\n", cmdline);
         }
@@ -59,11 +59,11 @@ void display_process_info(char *pid)
         exit(EXIT_FAILURE);
     }
 
-    // Display memory utilization information from the status file
+    // display memory utilization information from the status file
     printf("Memory Utilization Information:\n");
     system("cat /proc/$$/status | grep -E 'VmSize|VmRSS'");
 
-    // Display list of open files from the fd directory
+    // display list of open files from the fd directory
     printf("List of Open Files:\n");
     system("ls -l /proc/$$/fd");
 }
