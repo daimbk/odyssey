@@ -112,7 +112,7 @@ void displayTopProcesses(int topN)
 			{
 				// extract and print relevant information with proper formatting
 				char user[16], pid[8], cpu[8], mem[8], vsz[8], rss[8], tty[8], stat[8],
-				    command[159];  // command[159] for beter formatting
+				    command[159];  // command[159] for better formatting
 
 				sscanf(buffer, "%s%s%s%s%9s%s%s%s", user, pid, cpu, mem, vsz, rss, tty, stat);
 
