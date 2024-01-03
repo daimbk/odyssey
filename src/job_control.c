@@ -10,6 +10,7 @@
 #include "prompt.h"
 
 pid_t foreground = -1;
+volatile int exit_flag = 0;
 
 // set up signal handlers
 void setup_signal_handlers()
@@ -48,6 +49,7 @@ void handle_sigint(int signo)
         rl_replace_line("", 0);     // clear previous input line
         rl_forced_update_display(); // force readline to update the display
     }
+    exit_flag = 1;
 }
 
 // handle SIGTSTP (terminal stop, Ctrl+Z) signal
@@ -70,4 +72,5 @@ void handle_sigtstp(int signo)
         rl_on_new_line();
         rl_redisplay();
     }
+    exit_flag = 1;
 }

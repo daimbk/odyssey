@@ -4,6 +4,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <string.h>
+#include <processinfo.h>
+#include <sysinfo.h>
 
 #include "directory.h"
 #include "prompt.h"
@@ -265,6 +267,29 @@ int main()
                     {
                         perror("Error: unzip");
                     }
+                }
+            }
+            else if (strcmp(tokens[0], "psinfo") == 0)
+            {
+                if (tokenCount != 2)
+                {
+                    fprintf(stderr, "Usage: psinfo <PID>\n");
+                }
+                else
+                {
+                    display_process_info(tokens[1]);
+                }
+                continue; // skip the rest of the shell logic for this command
+            }
+            else if (strcmp(tokens[0], "sysinfo") == 0)
+            {
+                if (tokenCount != 2)
+                {
+                    fprintf(stderr, "Usage: sysinfo <top N processes>\n");
+                }
+                else
+                {
+                    display_system_info(tokens[1]);
                 }
             }
             else if ((strcmp(tokens[0], "ascii") == 0))
