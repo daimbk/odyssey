@@ -18,22 +18,21 @@ int display_system_info(const char *topN_str)
         return EXIT_FAILURE;
     }
     
-    // Set up signal handlers
+    // set up signal handlers
     setup_signal_handlers();
 
     while (!exit_flag)
     {
-        // Clear the terminal
         system("clear");
 
-        // Display system information
+        // display system information
         printf("System Information:\n");
         displayMemoryInfo();
         displayCpuUsage();
         displayDiskUsage();
         displayTopProcesses(topN);
 
-        // Sleep for the specified update interval
+        // sleep for the specified update interval
         sleep(updateInterval);
     }
     exit_flag = 0;
@@ -41,7 +40,7 @@ int display_system_info(const char *topN_str)
     return 0;
 }
 
-// Function to read and display total and free memory
+// read and display total and free memory
 void displayMemoryInfo()
 {
     FILE *memInfo = fopen("/proc/meminfo", "r");
@@ -63,7 +62,7 @@ void displayMemoryInfo()
     }
 }
 
-// Function to read and display CPU usage
+// read and display CPU usage
 void displayCpuUsage()
 {
     FILE *statFile = fopen("/proc/stat", "r");
@@ -92,7 +91,7 @@ void displayCpuUsage()
     }
 }
 
-// Function to read and display disk usage
+// read and display disk usage
 void displayDiskUsage()
 {
     FILE *df = popen("df -h /", "r");
@@ -111,13 +110,13 @@ void displayDiskUsage()
     }
 }
 
-// Function to display the top N processes
+// display the top N processes
 void displayTopProcesses(int topN)
 {
     printf("\n");
     printf("%-4s%-13s%-5s%-5s%-5s%-6s%-7s%-8s%-12s%-20s\n", "Rank", "USER", "PID", "%CPU", "%MEM", "VSZ", "RSS", "TTY", "STAT", "COMMAND");
 
-    // Run 'ps' command to get the top processes
+    // run 'ps' command to get the top processes
     char psCommand[MAX_BUFFER_LEN];
     snprintf(psCommand, sizeof(psCommand), "ps aux --sort=-%%cpu,%%mem -ww | head -n+%d", topN + 6);
 
@@ -125,21 +124,19 @@ void displayTopProcesses(int topN)
     if (ps != NULL)
     {
         char buffer[MAX_BUFFER_LEN];
-        int counter = 1; // Counter for numbering processes
+        int counter = 1; // counter for numbering processes
         while (fgets(buffer, sizeof(buffer), ps) != NULL)
         {
-            if (counter > 5) // Skip the header lines
+            if (counter > 5) // skip the header lines
             {
-                // Extract and print relevant information with proper formatting
+                // extract and print relevant information with proper formatting
                 char user[16], pid[8], cpu[8], mem[8], vsz[8], rss[8], tty[8], stat[8], command[159]; // command[159] for beter formatting
 
-                // Extract information from the current line
                 sscanf(buffer, "%s%s%s%s%9s%s%s%s", user, pid, cpu, mem, vsz, rss, tty, stat);
 
-                // Read the entire command line into the 'command' variable
+                // read the entire command line into the 'command' variable
                 fgets(command, sizeof(command), ps);
 
-                // Print the information
                 printf("%-4d%-20s", counter - 5, command);
             }
             counter++;
