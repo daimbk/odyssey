@@ -1,37 +1,10 @@
-name: Format Code
-
-on:
-  push:
-    paths:
-      - 'include/**/*'
-      - 'src/**/*'
-
+name: Clang Format Checker
+on: [pull_request]
 jobs:
-  format-code:
+  clang-format-checking:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
-
-    - name: Install clang-format
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y clang-format
-
-    - name: Format Code
-      run: |
-        # Get the list of changed C and header files in the last commit
-        files_changed=$(git diff --name-only --cached HEAD~1 | grep -E '\.c$|\.h$')
-
-        # Check if there are any changes
-        if [ -n "$files_changed" ]; then
-          # Run clang-format on changed files
-          clang-format -i -style=file $files_changed
-
-          # Stage changes (this is necessary after modifying files)
-          git add $files_changed
-
-          # Commit the changes
-          git commit --amend --no-edit
-        fi
+      - uses: actions/checkout@v2
+      - uses: RafikFarhad/clang-format-github-action@v3
+        with:
+          sources: "include/**/*.h,src/**/*.c"
