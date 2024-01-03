@@ -21,15 +21,17 @@ jobs:
 
     - name: Format Code
       run: |
-        # use git to find changed C and header files in the last commit
-        files_changed=$(git diff --name-only HEAD^ HEAD | grep -E '\.c$|\.h$')
+        # Get the list of changed C and header files in the last commit
+        files_changed=$(git diff --name-only --cached HEAD~1 | grep -E '\.c$|\.h$')
 
-        # check if there are any changes
+        # Check if there are any changes
         if [ -n "$files_changed" ]; then
           # Run clang-format on changed files
           clang-format -i -style=file $files_changed
 
-          # stage changes and commit
+          # Stage changes (this is necessary after modifying files)
           git add $files_changed
-          git commit -m "actions: apply clang-format"
+
+          # Commit the changes
+          git commit --amend --no-edit
         fi
