@@ -9,11 +9,12 @@
 #define COLOR_CYAN "\033[38;5;6m"
 #define COLOR_RESET "\033[0m"
 
-#include "globals.h"
 #include <pwd.h>
-#include <readline/readline.h>
 #include <readline/history.h>
+#include <readline/readline.h>
 #include <stdbool.h>
+
+#include "globals.h"
 
 void displayASCII();
 void getPromptInfo(char *username, char *hostname, char *currentDir);

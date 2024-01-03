@@ -1,9 +1,11 @@
+#include "prompt.h"
+
+#include <limits.h>
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h>
-#include <limits.h>
 #include <sys/ioctl.h>
-#include "prompt.h"
+#include <unistd.h>
+
 #include "config.h"
 
 // void displayASCII()
@@ -24,68 +26,60 @@
 // print in horizontal center of terminal
 void displayASCII()
 {
-    if (show_ascii_art)
-    {
-        struct winsize w;
-        ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-        int term_cols = w.ws_col;
+	if (show_ascii_art) {
+		struct winsize w;
+		ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+		int term_cols = w.ws_col;
 
-        int ascii_art_width = 76;
-        int padding = (term_cols - ascii_art_width) / 2;
+		int ascii_art_width = 76;
+		int padding = (term_cols - ascii_art_width) / 2;
 
-        printf("\n\n");
-        printf("%*s________ ________ ______.___. _________ __________________________.___.\n", padding, "");
-        printf("%*s\\_____  \\ \\______ \\__   |   |/   _____//   _____/\\_   _____/\\__   |   |\n", padding, "");
-        printf("%*s /   |   \\ |    |  \\/   |   |\\_____  \\ \\_____  \\  |    ___)_  /   |   |\n", padding, "");
-        printf("%*s/    |    \\|    `   \\____   |/        \\/        \\ |         \\ \\____   |\n", padding, "");
-        printf("%*s\\_______  /_______  / ______/_______  /_______  / /_______  / / ______/\n", padding, "");
-        printf("%*s        \\/        \\/\\/              \\/        \\/          \\/  \\/       \n", padding, "");
-        printf("\n\n");
-    }
+		printf("\n\n");
+		printf("%*s________ ________ ______.___. _________ __________________________.___.\n", padding, "");
+		printf("%*s\\_____  \\ \\______ \\__   |   |/   _____//   _____/\\_   _____/\\__   |   |\n", padding, "");
+		printf("%*s /   |   \\ |    |  \\/   |   |\\_____  \\ \\_____  \\  |    ___)_  /   |   |\n", padding, "");
+		printf("%*s/    |    \\|    `   \\____   |/        \\/        \\ |         \\ \\____   |\n", padding, "");
+		printf("%*s\\_______  /_______  / ______/_______  /_______  / /_______  / / ______/\n", padding, "");
+		printf("%*s        \\/        \\/\\/              \\/        \\/          \\/  \\/       \n", padding, "");
+		printf("\n\n");
+	}
 }
 
 void getPromptInfo(char *username, char *hostname, char *currentDir)
 {
-    struct passwd *pw = getpwuid(getuid());
+	struct passwd *pw = getpwuid(getuid());
 
-    if (gethostname(hostname, HOST_NAME_MAX) != 0)
-    {
-        perror("Error: gethostname");
-    }
+	if (gethostname(hostname, HOST_NAME_MAX) != 0) {
+		perror("Error: gethostname");
+	}
 
-    if (getcwd(currentDir, PATH_MAX) == NULL)
-    {
-        perror("Error: getcwd");
-    }
+	if (getcwd(currentDir, PATH_MAX) == NULL) {
+		perror("Error: getcwd");
+	}
 
-    replaceHomeWithPath(currentDir);
-    strncpy(username, pw->pw_name, strlen(pw->pw_name));
+	replaceHomeWithPath(currentDir);
+	strncpy(username, pw->pw_name, strlen(pw->pw_name));
 }
 
 void replaceHomeWithPath(char *path)
 {
-    struct passwd *pw = getpwuid(getuid());
-    const char *homeDir = pw->pw_dir;
-    size_t homeDirLen = strlen(homeDir);
+	struct passwd *pw = getpwuid(getuid());
+	const char *homeDir = pw->pw_dir;
+	size_t homeDirLen = strlen(homeDir);
 
-    if (strncmp(path, homeDir, homeDirLen) == 0)
-    {
-        memmove(path, "~", 1);
-        memmove(path + 1, path + homeDirLen, strlen(path) - homeDirLen + 1);
-    }
+	if (strncmp(path, homeDir, homeDirLen) == 0) {
+		memmove(path, "~", 1);
+		memmove(path + 1, path + homeDirLen, strlen(path) - homeDirLen + 1);
+	}
 }
 
 char *getCommandFromHistory(int index)
 {
-    HIST_ENTRY *entry = history_get(index);
-    if (entry)
-    {
-        return entry->line;
-    }
-    return NULL;
+	HIST_ENTRY *entry = history_get(index);
+	if (entry) {
+		return entry->line;
+	}
+	return NULL;
 }
 
-void initializeHistory()
-{
-    using_history();
-}
+void initializeHistory() { using_history(); }

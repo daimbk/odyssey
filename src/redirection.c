@@ -1,77 +1,69 @@
 #include "redirection.h"
+
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <string.h>
-#include <fcntl.h>
+#include <unistd.h>
 
 void handle_redirection(char **tokens, int redirIndex, int tokenCount)
 {
-    int fd;
-    pid_t child_pid;
+	int fd;
+	pid_t child_pid;
 
-    // determine the type of redirection
-    char *redir_type = tokens[redirIndex];
+	// determine the type of redirection
+	char *redir_type = tokens[redirIndex];
 
-    // open file for redirection
-    if (redir_type[0] == '>')
-    {
-        fd = open(tokens[redirIndex + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    }
-    else if (redir_type[0] == '<')
-    {
-        fd = open(tokens[redirIndex + 1], O_RDONLY);
-    }
+	// open file for redirection
+	if (redir_type[0] == '>') {
+		fd = open(tokens[redirIndex + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	} else if (redir_type[0] == '<') {
+		fd = open(tokens[redirIndex + 1], O_RDONLY);
+	}
 
-    if (fd == -1)
-    {
-        perror("File open failed");
-        exit(EXIT_FAILURE);
-    }
+	if (fd == -1) {
+		perror("File open failed");
+		exit(EXIT_FAILURE);
+	}
 
-    if ((child_pid = fork()) == -1)
-    {
-        perror("Fork failed");
-        exit(EXIT_FAILURE);
-    }
+	if ((child_pid = fork()) == -1) {
+		perror("Fork failed");
+		exit(EXIT_FAILURE);
+	}
 
-    if (child_pid == 0)
-    {
-        // redirect standard input/output to the file
-        dup2(fd, (redir_type[0] == '>') ? STDOUT_FILENO : STDIN_FILENO);
+	if (child_pid == 0) {
+		// redirect standard input/output to the file
+		dup2(fd, (redir_type[0] == '>') ? STDOUT_FILENO : STDIN_FILENO);
 
-        // close the file descriptor
-        close(fd);
+		// close the file descriptor
+		close(fd);
 
-        // null-terminate the tokens array at the redirection character
-        tokens[redirIndex] = NULL;
+		// null-terminate the tokens array at the redirection character
+		tokens[redirIndex] = NULL;
 
-        // execute the command before/after the redirection
-        if (execvp(tokens[0], tokens) == -1)
-        {
-            perror("Command execution failed");
-            exit(EXIT_FAILURE);
-        }
-    }
+		// execute the command before/after the redirection
+		if (execvp(tokens[0], tokens) == -1) {
+			perror("Command execution failed");
+			exit(EXIT_FAILURE);
+		}
+	}
 
-    // close the file descriptor in the parent
-    close(fd);
+	// close the file descriptor in the parent
+	close(fd);
 
-    // wait for the child process to finish
-    waitpid(child_pid, NULL, 0);
+	// wait for the child process to finish
+	waitpid(child_pid, NULL, 0);
 }
 
 // find the index of the first redirection symbol in the tokens array
 int findRedirection(char **tokens, int tokenCount)
 {
-    for (int i = 0; i < tokenCount; i++)
-    {
-        if (strcmp(tokens[i], ">") == 0 || strcmp(tokens[i], "<") == 0)
-        {
-            return i;
-        }
-    }
-    return -1;
+	for (int i = 0; i < tokenCount; i++) {
+		if (strcmp(tokens[i], ">") == 0 || strcmp(tokens[i], "<") == 0) {
+			return i;
+		}
+	}
+	return -1;
 }
