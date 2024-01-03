@@ -23,6 +23,9 @@ int main()
     // get saved shell config
     loadConfig();
 
+
+
+    
     // setup job control signals
     setup_signal_handlers();
 
