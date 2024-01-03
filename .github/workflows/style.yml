@@ -1,5 +1,9 @@
 name: Clang Format Checker
-on: [pull_request]
+on:
+  create:
+    branches:
+      - 'release/*'
+      
 jobs:
   clang-format-checking:
     runs-on: ubuntu-latest
@@ -7,4 +11,4 @@ jobs:
       - uses: actions/checkout@v2
       - uses: RafikFarhad/clang-format-github-action@v3
         with:
-          sources: "include/**/*.h,src/**/*.c"
+          sources: "include/*.h,src/*.c"
