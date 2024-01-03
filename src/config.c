@@ -9,8 +9,13 @@
 bool show_ascii_art = false;
 
 // function to create and write default config
-void createDefaultConfig(char *configFilePath)
+void
+createDefaultConfig(char *configFilePath)
 {
+
+
+
+    
     // create and open the config file
     FILE *configFile = fopen(configFilePath, "w");
     if (configFile == NULL)
