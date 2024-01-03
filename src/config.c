@@ -8,6 +8,24 @@
 
 bool show_ascii_art = false;
 
+// function to create and write default config
+void createDefaultConfig(char *configFilePath)
+{
+    // create and open the config file
+    FILE *configFile = fopen(configFilePath, "w");
+    if (configFile == NULL)
+    {
+        perror("Error creating config file");
+        exit(EXIT_FAILURE);
+    }
+
+    // --------WRITE DEFAULT CONFIG TO FILE-------
+    fprintf(configFile, "show_ascii_art=true\n");
+
+    // close the file
+    fclose(configFile);
+}
+
 void createConfigFolder()
 {
     char homeDir[1024];
@@ -27,6 +45,10 @@ void createConfigFolder()
     char configFolderPath[strlen(homeDir) + 1 + strlen(CONFIG_FOLDER_NAME) + 1];
     snprintf(configFolderPath, sizeof(configFolderPath), "%s/%s", homeDir, CONFIG_FOLDER_NAME);
 
+    // create the full path for the config file
+    char configFilePath[strlen(configFolderPath) + 1 + strlen(CONFIG_FILE_NAME) + 1];
+    snprintf(configFilePath, sizeof(configFilePath), "%s/%s", configFolderPath, CONFIG_FILE_NAME);
+
     // check if the folder already exists, create it if not
     struct stat st = {0};
     if (stat(configFolderPath, &st) == -1)
@@ -37,27 +59,15 @@ void createConfigFolder()
             exit(EXIT_FAILURE);
         }
 
-        // create the full path for the config file
-        char configFilePath[strlen(configFolderPath) + 1 + strlen(CONFIG_FILE_NAME) + 1];
-        snprintf(configFilePath, sizeof(configFilePath), "%s/%s", configFolderPath, CONFIG_FILE_NAME);
-
-        // create and open the config file
-        FILE *configFile = fopen(configFilePath, "w");
-        if (configFile == NULL)
-        {
-            perror("Error creating config file");
-            exit(EXIT_FAILURE);
-        }
-
-        // --------WRITE DEFAULT CONFIG TO FILE-------
-        fprintf(configFile, "show_ascii_art=true\n");
-
-        // close the file
-        fclose(configFile);
+        createDefaultConfig(configFilePath);
     }
     else
     {
-        printf("Config folder already exists.\n");
+        // folder exists, check if config file exists
+        if (stat(configFilePath, &st) == -1)
+        {
+            createDefaultConfig(configFilePath);
+        }
     }
 }
 
@@ -78,15 +88,56 @@ void loadConfig()
 
     // ---------LOAD CONFIG FROM FILE----------
     char setting[64];
-    fscanf(fp, "show_ascii_art=%s", setting);
+    char line[128];
 
-    if (strcmp(setting, "true") == 0)
+    while (fgets(line, sizeof(line), fp))
     {
-        show_ascii_art = true;
+        if (strstr(line, "show_ascii_art"))
+        {
+            sscanf(line, "show_ascii_art=%s", setting);
+
+            if (strcmp(setting, "true") == 0)
+            {
+                show_ascii_art = true;
+            }
+            else
+            {
+                show_ascii_art = false;
+            }
+        }
     }
-    else
+
+    fclose(fp);
+}
+
+void toggle_ascii_art(char *cmd)
+{
+
+    char *home = getenv("HOME");
+    char config_file[256];
+    strcpy(config_file, home);
+    strcat(config_file, "/.odyssey/shellconfig.txt");
+
+    FILE *fp = fopen(config_file, "r+");
+
+    char line[64];
+    while (fgets(line, sizeof(line), fp))
     {
-        show_ascii_art = false;
+        if (strstr(line, "show_ascii_art"))
+        {
+            fseek(fp, -strlen(line), SEEK_CUR);
+            fputs("show_ascii_art=", fp);
+
+            if (strcmp(cmd, "enable") == 0)
+            {
+                fputs("true\n", fp);
+            }
+            else
+            {
+                fputs("false\n", fp);
+            }
+            break;
+        }
     }
 
     fclose(fp);

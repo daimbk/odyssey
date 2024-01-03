@@ -11,5 +11,6 @@ extern bool show_ascii_art;
 
 void createConfigFolder();
 void loadConfig();
+void toggle_ascii_art(char *cmd);
 
 #endif

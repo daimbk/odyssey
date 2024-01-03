@@ -1,3 +1,6 @@
+# Editor
+.vscode
+
 # Prerequisites
 *.d
 
@@ -51,4 +54,4 @@ Module.symvers
 Mkfile.old
 dkms.conf
 shell
-.vscode/
+odyssey

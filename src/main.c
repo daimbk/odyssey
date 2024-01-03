@@ -4,6 +4,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <string.h>
+#include <processinfo.h>
+#include <sysinfo.h>
 
 #include "directory.h"
 #include "prompt.h"
@@ -13,8 +15,6 @@
 #include "pipes.h"
 #include "config.h"
 #include "job_control.h"
-#include <processinfo.h>
-#include <sysinfo.h>
 
 #define MAX_INPUT_SIZE 1024
 
@@ -279,7 +279,7 @@ int main()
                 {
                     display_process_info(tokens[1]);
                 }
-                continue; // Skip the rest of the shell logic for this command
+                continue; // skip the rest of the shell logic for this command
             }
             else if (strcmp(tokens[0], "sysinfo") == 0)
             {
@@ -292,11 +292,16 @@ int main()
                     display_system_info(tokens[1]);
                 }
             }
-            else if (strcmp(tokens[0], "exit") == 0)
+            else if ((strcmp(tokens[0], "ascii") == 0))
             {
-                printf("Exiting Shell..\n");
-                free(input);
-                break;
+                if ((tokenCount != 2) || (strcmp(tokens[1], "enable") != 0 && strcmp(tokens[1], "disable") != 0))
+                {
+                    printf("Usage: ascii <enable OR disable>\n");
+                }
+                else
+                {
+                    toggle_ascii_art(tokens[1]);
+                }
             }
             else
             {
