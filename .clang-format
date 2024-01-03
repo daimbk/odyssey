@@ -1,4 +1,4 @@
-BasedOnStyle: GNU
+BasedOnStyle: GOOGLE
 IndentWidth: 4
 UseTab: true
 TabWidth: 4
