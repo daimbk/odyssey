@@ -217,11 +217,10 @@ int main()
 					runFileSearch(tokens[1], tokens[2]);
 				}
 
-
-
-			} else {
+			} else {				
 				// handle other commands using execvp
 				// create a child process
+				
 				pid_t child_pid = fork();
 
 				if (child_pid == -1) {
