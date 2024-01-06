@@ -37,7 +37,6 @@ void searchFiles(const char *directory, const char *keyword) {
     closedir(dir);
 }
 
-// Implementation of the runFileSearch function
 void runFileSearch(const char *directory, const char *keyword) {
     printf("Searching for files with keyword '%s' in directory '%s':\n", keyword, directory);
     searchFiles(directory, keyword);
