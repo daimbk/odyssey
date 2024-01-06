@@ -5,7 +5,7 @@
 
 ## Overview
 
-Odyssey Shell aka odie is a flexible and user-friendly command-line interface designed to make customization easy. Whether you are a casual user or a power user, Odyssey Shell provides a rich set of features and customization options to enhance your command-line experience.
+Odyssey Shell aka odie is a flexible and user-friendly command-line interface designed to make customization easy. Whether you are a casual user or a power user, Odyssey provides a rich set of features and customization options to enhance your command-line experience.
 
 ## Features
 
@@ -28,18 +28,18 @@ Odyssey Shell aka odie is a flexible and user-friendly command-line interface de
 
     ```bash
     git clone https://github.com/daimbk/odyssey.git
-    cd odyssey-shell
+    cd odyssey
     ```
 
 2. Build and install the shell:
 
     ```bash
     make
-    sudo make install
+    make install
     ```
 
 ### Usage
 
 - Restart terminal session.
-- Launch Odyssey Shell by typing `odie` in your terminal.
+- Launch Odyssey by typing `odie` in your terminal.
 - Enjoy having easy ricing right away.
