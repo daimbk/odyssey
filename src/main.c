@@ -18,6 +18,7 @@
 #include "search.h"
 
 #define MAX_INPUT_SIZE 1024
+
 int main()
 {
 	// get saved shell config
