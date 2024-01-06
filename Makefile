@@ -30,9 +30,21 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
+INSTALL_DIR = ~/.odyssey
+
 install:
-	# Install necessary tools using the package manager
-	sudo apt-get install -y $(INSTALL_DEPS)
+	@sudo apt-get install -y $(INSTALL_DEPS)
+
+	@mkdir -p $(INSTALL_DIR)
+
+	@# copy the executable to install dir
+	@cp $(EXECUTABLE) $(INSTALL_DIR)/odyssey
+
+	@echo "alias odie='$(INSTALL_DIR)/odyssey'" >> ~/.bashrc
+	
+	@echo "\nOdyssey shell installed successfully"
+	@echo "Restart terminal session"
+	@echo "Run 'odie' to start Odyssey shell"
 
 format:
 	clang-format -i $(INCLUDE_FILES) $(SRC_FILES)
