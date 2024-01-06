@@ -3,4 +3,4 @@
 
 void runFileSearch(const char *directory, const char *keyword);
 
-#endif  // SEARCH_H
+#endif
