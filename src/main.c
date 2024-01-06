@@ -201,9 +201,6 @@ int main()
 				} else {
 					display_system_info(tokens[1]);
 				}
-			
-
-			
 			} else if ((strcmp(tokens[0], "ascii") == 0)) {
 				if ((tokenCount != 2) || (strcmp(tokens[1], "enable") != 0 && strcmp(tokens[1], "disable") != 0)) {
 					printf("Usage: ascii <enable OR disable>\n");
@@ -216,11 +213,9 @@ int main()
 				} else {
 					runFileSearch(tokens[1], tokens[2]);
 				}
-
 			} else {				
 				// handle other commands using execvp
 				// create a child process
-				
 				pid_t child_pid = fork();
 
 				if (child_pid == -1) {
