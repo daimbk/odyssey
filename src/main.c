@@ -100,22 +100,6 @@ int main()
 						perror("Error: cd");
 					}
 				}
-			} else if (strcmp(tokens[0], "mkdir") == 0) {
-				if (tokenCount < 2) {
-					printf("Usage: mkdir <directory_name>\n");
-				} else {
-					if (createDirectory(tokens[1]) != 0) {
-						perror("Error: mkdir");
-					}
-				}
-			} else if (strcmp(tokens[0], "rmdir") == 0) {
-				if (tokenCount < 2) {
-					printf("Usage: rmdir <directory_name>\n");
-				} else {
-					if (deleteDirectory(tokens[1]) != 0) {
-						perror("Error: rmdir");
-					}
-				}
 			} else if (strcmp(tokens[0], "cp") == 0) {
 				if (tokenCount < 3) {
 					printf("Usage: cp <source> <destination>\n");
@@ -136,8 +120,16 @@ int main()
 				if (tokenCount < 2) {
 					printf("Usage: rm <file_name>\n");
 				} else {
-					if (recursiveDelete(tokens[1]) != 0) {
+					if (deleteFile(tokens[1]) != 0) {
 						perror("Error: rm");
+					}
+				}
+			} else if (strcmp(tokens[0], "rmdir") == 0) {
+				if (tokenCount < 2) {
+					printf("Usage: rmdir <directory_name>\n");
+				} else {
+					if (recursiveDelete(tokens[1]) != 0) {
+						perror("Error: rmdir");
 					}
 				}
 			} else if (strcmp(tokens[0], "rename") == 0) {
