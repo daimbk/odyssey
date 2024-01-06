@@ -8,6 +8,9 @@
 #include <unistd.h>
 
 bool show_ascii_art = false;
+char *usernameColor = PURPLE;
+char *hostnameColor = CYAN;
+char *currentDirColor = WHITE;
 
 // function to create and write default config
 void createDefaultConfig(char *configFilePath)
@@ -123,4 +126,97 @@ void toggle_ascii_art(char *cmd)
 	}
 
 	fclose(fp);
+}
+
+void setUsernameColor(char *color)
+{
+	if (strcmp(color, "RESET") == 0) {
+		usernameColor = RESET;
+	} else if (strcmp(color, "BLACK") == 0) {
+		usernameColor = BLACK;
+	} else if (strcmp(color, "RED") == 0) {
+		usernameColor = RED;
+	} else if (strcmp(color, "GREEN") == 0) {
+		usernameColor = GREEN;
+	} else if (strcmp(color, "YELLOW") == 0) {
+		usernameColor = YELLOW;
+	} else if (strcmp(color, "BLUE") == 0) {
+		usernameColor = BLUE;
+	} else if (strcmp(color, "MAGENTA") == 0) {
+		usernameColor = MAGENTA;
+	} else if (strcmp(color, "WHITE") == 0) {
+		usernameColor = WHITE;
+	} else if (strcmp(color, "PURPLE") == 0) {
+		usernameColor = PURPLE;
+	} else if (strcmp(color, "LIGHT_PURPLE") == 0) {
+		usernameColor = LIGHT_PURPLE;
+	} else if (strcmp(color, "DARK_PURPLE") == 0) {
+		usernameColor = DARK_PURPLE;
+	} else if (strcmp(color, "CYAN") == 0) {
+		usernameColor = CYAN;
+	} else {
+		printf("Invalid color entered for username. Keeping the default color.\n");
+	}
+}
+
+void setHostnameColor(char *color)
+{
+	if (strcmp(color, "RESET") == 0) {
+		hostnameColor = RESET;
+	} else if (strcmp(color, "BLACK") == 0) {
+		hostnameColor = BLACK;
+	} else if (strcmp(color, "RED") == 0) {
+		hostnameColor = RED;
+	} else if (strcmp(color, "GREEN") == 0) {
+		hostnameColor = GREEN;
+	} else if (strcmp(color, "YELLOW") == 0) {
+		hostnameColor = YELLOW;
+	} else if (strcmp(color, "BLUE") == 0) {
+		hostnameColor = BLUE;
+	} else if (strcmp(color, "MAGENTA") == 0) {
+		hostnameColor = MAGENTA;
+	} else if (strcmp(color, "WHITE") == 0) {
+		hostnameColor = WHITE;
+	} else if (strcmp(color, "PURPLE") == 0) {
+		hostnameColor = PURPLE;
+	} else if (strcmp(color, "LIGHT_PURPLE") == 0) {
+		hostnameColor = LIGHT_PURPLE;
+	} else if (strcmp(color, "DARK_PURPLE") == 0) {
+		hostnameColor = DARK_PURPLE;
+	} else if (strcmp(color, "CYAN") == 0) {
+		hostnameColor = CYAN;
+	} else {
+		printf("Invalid color entered for hostname. Keeping the default color.\n");
+	}
+}
+
+void setCurrentDirColor(char *color)
+{
+	if (strcmp(color, "RESET") == 0) {
+		currentDirColor = RESET;
+	} else if (strcmp(color, "BLACK") == 0) {
+		currentDirColor = BLACK;
+	} else if (strcmp(color, "RED") == 0) {
+		currentDirColor = RED;
+	} else if (strcmp(color, "GREEN") == 0) {
+		currentDirColor = GREEN;
+	} else if (strcmp(color, "YELLOW") == 0) {
+		currentDirColor = YELLOW;
+	} else if (strcmp(color, "BLUE") == 0) {
+		currentDirColor = BLUE;
+	} else if (strcmp(color, "MAGENTA") == 0) {
+		currentDirColor = MAGENTA;
+	} else if (strcmp(color, "WHITE") == 0) {
+		currentDirColor = WHITE;
+	} else if (strcmp(color, "PURPLE") == 0) {
+		currentDirColor = PURPLE;
+	} else if (strcmp(color, "LIGHT_PURPLE") == 0) {
+		currentDirColor = LIGHT_PURPLE;
+	} else if (strcmp(color, "DARK_PURPLE") == 0) {
+		currentDirColor = DARK_PURPLE;
+	} else if (strcmp(color, "CYAN") == 0) {
+		currentDirColor = CYAN;
+	} else {
+		printf("Invalid color entered for current directory. Keeping the default color.\n");
+	}
 }

@@ -39,7 +39,7 @@ int main()
 	while (1) {
 		getPromptInfo(username, hostName, currentDir);
 		char *prompt = malloc(MAX_INPUT_SIZE + 50);  // add extra space for the prompt
-		sprintf(prompt, "%s%s@%s:%s%s$ %s", COLOR_LIGHT_PURPLE, username, hostName, COLOR_CYAN, currentDir, COLOR_RESET);
+		sprintf(prompt, "%s%s@%s%s:%s%s$ %s", usernameColor, username, hostnameColor, hostName, currentDirColor, currentDir, RESET);
 
 		char *input = readline(prompt);
 		free(prompt);
@@ -198,6 +198,20 @@ int main()
 					printf("Usage: ascii <enable OR disable>\n");
 				} else {
 					toggle_ascii_art(tokens[1]);
+				}
+			} else if ((strcmp(tokens[0], "setcolor") == 0)) {
+				if (tokenCount != 3) {
+					printf("Usage: setcolor <username OR hostname OR currentdir> <COLOR>\n");
+				} else {
+					if (strcmp(tokens[1], "username") == 0) {
+						setUsernameColor(tokens[2]);
+					} else if (strcmp(tokens[1], "hostname") == 0) {
+						setHostnameColor(tokens[2]);
+					} else if (strcmp(tokens[1], "currentdir") == 0) {
+						setCurrentDirColor(tokens[2]);
+					} else {
+						printf("Usage: setcolor <username OR hostname OR currentdir> <COLOR>\n");
+					}
 				}
 			} else {
 				// handle other commands using execvp

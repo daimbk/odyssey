@@ -5,10 +5,6 @@
 #define HOST_NAME_MAX 64
 #define LOGIN_NAME_MAX 256
 
-#define COLOR_LIGHT_PURPLE "\033[38;5;55m"
-#define COLOR_CYAN "\033[38;5;6m"
-#define COLOR_RESET "\033[0m"
-
 #include <pwd.h>
 #include <readline/history.h>
 #include <readline/readline.h>
