@@ -18,7 +18,3 @@
 #define CYAN "\e[38;5;14m"
 
 #endif
-
-// TODO
-// 1. clean checking
-// 2. filing
