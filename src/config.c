@@ -8,6 +8,9 @@
 #include <unistd.h>
 
 bool show_ascii_art = false;
+char *usernameColor = PURPLE;
+char *hostnameColor = CYAN;
+char *currentDirColor = WHITE;
 
 // function to create and write default config
 void createDefaultConfig(char *configFilePath)
@@ -124,3 +127,38 @@ void toggle_ascii_art(char *cmd)
 
 	fclose(fp);
 }
+
+void setColor(char *color, char **variable, const char *name)
+{
+	if (strcmp(color, "RESET") == 0) {
+		*variable = RESET;
+	} else if (strcmp(color, "BLACK") == 0) {
+		*variable = BLACK;
+	} else if (strcmp(color, "RED") == 0) {
+		*variable = RED;
+	} else if (strcmp(color, "GREEN") == 0) {
+		*variable = GREEN;
+	} else if (strcmp(color, "YELLOW") == 0) {
+		*variable = YELLOW;
+	} else if (strcmp(color, "BLUE") == 0) {
+		*variable = BLUE;
+	} else if (strcmp(color, "MAGENTA") == 0) {
+		*variable = MAGENTA;
+	} else if (strcmp(color, "WHITE") == 0) {
+		*variable = WHITE;
+	} else if (strcmp(color, "PURPLE") == 0) {
+		*variable = PURPLE;
+	} else if (strcmp(color, "LIGHT_PURPLE") == 0) {
+		*variable = LIGHT_PURPLE;
+	} else if (strcmp(color, "DARK_PURPLE") == 0) {
+		*variable = DARK_PURPLE;
+	} else if (strcmp(color, "CYAN") == 0) {
+		*variable = CYAN;
+	} else {
+		printf("Invalid color entered for %s. Keeping the default color.\n", name);
+	}
+}
+
+void setUsernameColor(char *color) { setColor(color, &usernameColor, "username"); }
+void setHostnameColor(char *color) { setColor(color, &hostnameColor, "hostname"); }
+void setCurrentDirColor(char *color) { setColor(color, &currentDirColor, "current directory"); }

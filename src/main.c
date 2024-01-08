@@ -40,7 +40,7 @@ int main()
 	while (1) {
 		getPromptInfo(username, hostName, currentDir);
 		char *prompt = malloc(MAX_INPUT_SIZE + 50);  // add extra space for the prompt
-		sprintf(prompt, "%s%s@%s:%s%s$ %s", COLOR_LIGHT_PURPLE, username, hostName, COLOR_CYAN, currentDir, COLOR_RESET);
+		sprintf(prompt, "%s%s@%s%s:%s%s$ %s", usernameColor, username, hostnameColor, hostName, currentDirColor, currentDir, RESET);
 
 		char *input = readline(prompt);
 		free(prompt);
@@ -101,22 +101,6 @@ int main()
 						perror("Error: cd");
 					}
 				}
-			} else if (strcmp(tokens[0], "mkdir") == 0) {
-				if (tokenCount < 2) {
-					printf("Usage: mkdir <directory_name>\n");
-				} else {
-					if (createDirectory(tokens[1]) != 0) {
-						perror("Error: mkdir");
-					}
-				}
-			} else if (strcmp(tokens[0], "rmdir") == 0) {
-				if (tokenCount < 2) {
-					printf("Usage: rmdir <directory_name>\n");
-				} else {
-					if (deleteDirectory(tokens[1]) != 0) {
-						perror("Error: rmdir");
-					}
-				}
 			} else if (strcmp(tokens[0], "cp") == 0) {
 				if (tokenCount < 3) {
 					printf("Usage: cp <source> <destination>\n");
@@ -137,8 +121,16 @@ int main()
 				if (tokenCount < 2) {
 					printf("Usage: rm <file_name>\n");
 				} else {
-					if (recursiveDelete(tokens[1]) != 0) {
+					if (deleteFile(tokens[1]) != 0) {
 						perror("Error: rm");
+					}
+				}
+			} else if (strcmp(tokens[0], "rmdir") == 0) {
+				if (tokenCount < 2) {
+					printf("Usage: rmdir <directory_name>\n");
+				} else {
+					if (recursiveDelete(tokens[1]) != 0) {
+						perror("Error: rmdir");
 					}
 				}
 			} else if (strcmp(tokens[0], "rename") == 0) {
@@ -214,7 +206,21 @@ int main()
 				} else {
 					runFileSearch(tokens[1], tokens[2]);
 				}
-			} else {				
+			} else if ((strcmp(tokens[0], "setcolor") == 0)) {
+				if (tokenCount != 3) {
+					printf("Usage: setcolor <username OR hostname OR currentdir> <COLOR>\n");
+				} else {
+					if (strcmp(tokens[1], "username") == 0) {
+						setUsernameColor(tokens[2]);
+					} else if (strcmp(tokens[1], "hostname") == 0) {
+						setHostnameColor(tokens[2]);
+					} else if (strcmp(tokens[1], "currentdir") == 0) {
+						setCurrentDirColor(tokens[2]);
+					} else {
+						printf("Usage: setcolor <username OR hostname OR currentdir> <COLOR>\n");
+					}
+				}
+			} else {
 				// handle other commands using execvp
 				// create a child process
 				pid_t child_pid = fork();
