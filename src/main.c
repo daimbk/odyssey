@@ -15,6 +15,7 @@
 #include "pipes.h"
 #include "prompt.h"
 #include "redirection.h"
+#include "search.h"
 
 #define MAX_INPUT_SIZE 1024
 
@@ -198,6 +199,12 @@ int main()
 					printf("Usage: ascii <enable OR disable>\n");
 				} else {
 					toggle_ascii_art(tokens[1]);
+				}
+			} else if (strcmp(tokens[0], "search") == 0) {
+				if (tokenCount < 3) {
+					printf("Usage: search <directory_path> <search_keyword>\n");
+				} else {
+					runFileSearch(tokens[1], tokens[2]);
 				}
 			} else if ((strcmp(tokens[0], "setcolor") == 0)) {
 				if (tokenCount != 3) {
