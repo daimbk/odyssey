@@ -1,14 +1,13 @@
 #ifndef JOB_CONTROL_H
 #define JOB_CONTROL_H
 
-#include <sys/types.h>
 #include <stddef.h>
+#include <sys/types.h>
 
-typedef struct Node
-{
-    pid_t pid;
-    char *command;
-    struct Node *next;
+typedef struct Node {
+	pid_t pid;
+	char *command;
+	struct Node *next;
 } Node;
 
 extern pid_t foreground;

@@ -228,13 +228,12 @@ int main()
 					}
 				}
 			} else {
-
 				// Check if the command should run in the background
 				int run_in_background = (tokenCount > 1 && strcmp(tokens[tokenCount - 1], "&") == 0);
-				
+
 				// handle other commands using execvp
 				// create a child process
-				
+
 				pid_t child_pid = fork();
 
 				if (child_pid == -1) {
@@ -256,21 +255,17 @@ int main()
 					}
 				} else {
 					// parent process
-					if (!run_in_background)
-					{
+					if (!run_in_background) {
 						remove_job(child_pid);
 						// If the command is meant to run in the foreground, wait for the child to finish
 						foreground = child_pid;
 						int status;
 						waitpid(child_pid, &status, WUNTRACED);
-						if (WIFSTOPPED(status))
-						{
+						if (WIFSTOPPED(status)) {
 							// The child process was stopped by Ctrl+Z
 							foreground = -1;
 						}
-					}
-					else
-					{
+					} else {
 						// Add job information to the linked list
 						add_job(child_pid, input);
 
@@ -283,9 +278,9 @@ int main()
 
 		free(input);
 	}
-	
+
 	// Clean up job information when the shell exits
-    cleanup_jobs();
+	cleanup_jobs();
 
 	return 0;
 }
