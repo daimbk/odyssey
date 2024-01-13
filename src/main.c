@@ -206,6 +206,13 @@ int main()
 				} else {
 					runFileSearch(tokens[1], tokens[2]);
 				}
+			} else if (strcmp(tokens[0], "jobs") == 0) {
+				// Check for incorrect usage
+				if (tokenCount > 1) {
+					printf("Usage: jobs\n");
+				} else {
+					print_jobs();
+				}
 			} else if ((strcmp(tokens[0], "setcolor") == 0)) {
 				if (tokenCount != 3) {
 					printf("Usage: setcolor <username OR hostname OR currentdir> <COLOR>\n");
@@ -221,8 +228,13 @@ int main()
 					}
 				}
 			} else {
+
+				// Check if the command should run in the background
+				int run_in_background = (tokenCount > 1 && strcmp(tokens[tokenCount - 1], "&") == 0);
+				
 				// handle other commands using execvp
 				// create a child process
+				
 				pid_t child_pid = fork();
 
 				if (child_pid == -1) {
@@ -244,14 +256,26 @@ int main()
 					}
 				} else {
 					// parent process
-					foreground = child_pid;	 // set the current foreground process PID
+					if (!run_in_background)
+					{
+						remove_job(child_pid);
+						// If the command is meant to run in the foreground, wait for the child to finish
+						foreground = child_pid;
+						int status;
+						waitpid(child_pid, &status, WUNTRACED);
+						if (WIFSTOPPED(status))
+						{
+							// The child process was stopped by Ctrl+Z
+							foreground = -1;
+						}
+					}
+					else
+					{
+						// Add job information to the linked list
+						add_job(child_pid, input);
 
-					// wait for the child to finish
-					int status;
-					waitpid(child_pid, &status, WUNTRACED);
-					if (WIFSTOPPED(status)) {
-						// the child process was stopped by Ctrl+Z
-						foreground = -1;  // reset current foreground process PID
+						// If the command is meant to run in the background, print information and continue
+						printf("[%d] %d\n", get_next_job_id(), child_pid);
 					}
 				}
 			}
@@ -259,6 +283,9 @@ int main()
 
 		free(input);
 	}
+	
+	// Clean up job information when the shell exits
+    cleanup_jobs();
 
 	return 0;
 }
