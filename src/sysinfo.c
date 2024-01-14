@@ -1,4 +1,5 @@
-#include <job_control.h>
+#include "job_control.h"
+
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -112,7 +113,7 @@ void displayTopProcesses(int topN)
 			{
 				// extract and print relevant information with proper formatting
 				char user[16], pid[8], cpu[8], mem[8], vsz[8], rss[8], tty[8], stat[8],
-				    command[159];  // command[159] for better formatting
+				    command[90];  // command[159] for better formatting
 
 				sscanf(buffer, "%s%s%s%s%9s%s%s%s", user, pid, cpu, mem, vsz, rss, tty, stat);
 
@@ -120,6 +121,7 @@ void displayTopProcesses(int topN)
 				fgets(command, sizeof(command), ps);
 
 				printf("%-4d%-20s", counter - 5, command);
+				printf("\n");
 			}
 			counter++;
 		}
