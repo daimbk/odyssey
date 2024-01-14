@@ -1,4 +1,5 @@
 #include "job_control.h"
+#include "prompt.h"
 
 #include <readline/history.h>
 #include <readline/readline.h>
@@ -7,8 +8,6 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
-
-#include "prompt.h"
 
 int next_job_id = 1;
 pid_t foreground = -1;
