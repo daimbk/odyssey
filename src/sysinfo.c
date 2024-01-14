@@ -1,11 +1,11 @@
-#include "job_control.h"
-
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sysinfo.h>
 #include <unistd.h>
+
+#include "job_control.h"
 
 int display_system_info(const char *topN_str)
 {
