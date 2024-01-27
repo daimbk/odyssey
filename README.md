@@ -14,6 +14,7 @@ Odyssey Shell aka odie is a flexible and user-friendly command-line interface de
 - **History Tracking:** Quickly access and repeat previously executed commands using the command history.
 - **Compression Tools:** Seamlessly compress and decompress files and folders with built-in compression utilities.
 - **Redirection and Pipes:** Efficiently manage input/output redirection and pipes for advanced command chaining.
+- **Job Controls & Background Processes:** Execute commands in the background, enabling continuous command entry. This pivotal feature streamlines workflow, enabling parallel task management and productivity optimization in complex setups. Track and control background processes seamlessly with the job list for optimal shell efficiency.
 
 ## Getting Started
 
