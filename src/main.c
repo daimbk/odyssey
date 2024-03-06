@@ -1,45 +1,31 @@
-#include <processinfo.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <sysinfo.h>
-#include <unistd.h>
 
 #include "autocomplete.h"
-#include "compression.h"
+#include "commands.h"
 #include "config.h"
 #include "directory.h"
 #include "job_control.h"
-#include "pipes.h"
 #include "prompt.h"
-#include "redirection.h"
-#include "search.h"
-
-#define MAX_INPUT_SIZE 1024
 
 int main()
 {
-	// get saved shell config
+	// initialization
 	loadConfig();
-
-	// setup job control signals
 	setup_signal_handlers();
+	initializeHistory();
+	rl_attempted_completion_function = (rl_completion_func_t *)autocomplete_generator;
+	displayASCII();
 
 	char currentDir[PATH_MAX];
 	char hostName[HOST_NAME_MAX];
 	char username[LOGIN_NAME_MAX];
 
-	initializeHistory();  // initialize command history
-	rl_attempted_completion_function = (rl_completion_func_t *)autocomplete_generator;
-
-	// display ascii
-	displayASCII();
-
 	while (1) {
+		// prompt
 		getPromptInfo(username, hostName, currentDir);
-		char *prompt = malloc(MAX_INPUT_SIZE + 50);  // add extra space for the prompt
+		char *prompt = malloc(MAX_INPUT_SIZE + 50);
 		sprintf(prompt, "%s%s@%s%s:%s%s$ %s", usernameColor, username, hostnameColor, hostName, currentDirColor, currentDir, RESET);
 
 		char *input = readline(prompt);
@@ -49,238 +35,22 @@ int main()
 			break;
 		}
 
-		// if the input is not empty, add it to history
+		// add input to history
 		if (strlen(input) > 0) {
 			add_history(input);
 		}
 
-		char *tokens[MAX_INPUT_SIZE];
-
 		// tokenize input
-		char *token = strtok(input, " ");
-		int tokenCount = 0;
+		char *tokens[MAX_INPUT_SIZE];
+		int tokenCount = tokenizeInput(input, tokens);
 
-		while (token != NULL) {
-			// store the token in the tokens array
-			tokens[tokenCount] = token;
-			tokenCount++;
-
-			token = strtok(NULL, " ");
-		}
-
-		// find the index of redirection and pipe symbols
-		int redirIndex = findRedirection(tokens, tokenCount);
-		int pipeIndex = findPipe(tokens, tokenCount);
-
-		// handle input/output redirection
-		if (redirIndex != -1) {
-			handle_redirection(tokens, redirIndex, tokenCount);
-		}
-
-		// handle pipes
-		if (pipeIndex != -1) {
-			handle_pipe(tokens, pipeIndex, tokenCount);
-		}
-
-		// handle commands
-		// quit shell on "exit" command
-		if (tokenCount == 1 && strcmp(tokens[0], "exit") == 0) {
-			printf("Exiting Shell..\n");
-			free(input);
-			break;
-		}
-
-		if (tokenCount > 0) {
-			if (strcmp(tokens[0], "cd") == 0) {
-				if (tokenCount < 2) {
-					if (changeDirectory(getenv("HOME")) != 0) {
-						perror("Error: cd");
-					}
-				} else {
-					if (changeDirectory(tokens[1]) != 0) {
-						perror("Error: cd");
-					}
-				}
-			} else if (strcmp(tokens[0], "cp") == 0) {
-				if (tokenCount < 3) {
-					printf("Usage: cp <source> <destination>\n");
-				} else {
-					if (copyFile(tokens[1], tokens[2]) != 0) {
-						perror("Error: cp");
-					}
-				}
-			} else if (strcmp(tokens[0], "mv") == 0) {
-				if (tokenCount < 3) {
-					printf("Usage: mv <source> <destination>\n");
-				} else {
-					if (moveFile(tokens[1], tokens[2]) != 0) {
-						perror("Error: mv");
-					}
-				}
-			} else if (strcmp(tokens[0], "rm") == 0) {
-				if (tokenCount < 2) {
-					printf("Usage: rm <file_name>\n");
-				} else {
-					if (deleteFile(tokens[1]) != 0) {
-						perror("Error: rm");
-					}
-				}
-			} else if (strcmp(tokens[0], "rmdir") == 0) {
-				if (tokenCount < 2) {
-					printf("Usage: rmdir <directory_name>\n");
-				} else {
-					if (recursiveDelete(tokens[1]) != 0) {
-						perror("Error: rmdir");
-					}
-				}
-			} else if (strcmp(tokens[0], "rename") == 0) {
-				if (tokenCount < 3) {
-					printf("Usage: rename <old_name> <new_name>\n");
-				} else {
-					if (renameFile(tokens[1], tokens[2]) != 0) {
-						perror("Error: mv");
-					}
-				}
-			} else if (strcmp(tokens[0], "stat") == 0) {
-				if (tokenCount < 2) {
-					printf("Usage: stat <file_or_directory>\n");
-				} else {
-					if (getFileInformation(tokens[1]) != 0) {
-						perror("Error: stat");
-					}
-				}
-			} else if (strcmp(tokens[0], "gzip") == 0) {
-				if (tokenCount < 2) {
-					printf("Usage: gzip <file_name>\n");
-				} else {
-					if (compressFile(tokens[1]) != 0) {
-						perror("Error: gzip");
-					}
-				}
-			} else if (strcmp(tokens[0], "gunzip") == 0) {
-				if (tokenCount < 2) {
-					printf("Usage: gunzip <file_name.gz>\n");
-				} else {
-					if (decompressFile(tokens[1]) != 0) {
-						perror("Error: gunzip");
-					}
-				}
-			} else if (strcmp(tokens[0], "zip") == 0) {
-				if (tokenCount < 3) {
-					printf("Usage: zip <folder_path> <zip_file_name>\n");
-				} else {
-					if (compressFolder(tokens[1], tokens[2]) != 0) {
-						perror("Error: zip");
-					}
-				}
-			} else if (strcmp(tokens[0], "unzip") == 0) {
-				if (tokenCount < 3) {
-					printf("Usage: unzip <zip_file_path> <extract_path>\n");
-				} else {
-					if (decompressZip(tokens[1], tokens[2]) != 0) {
-						perror("Error: unzip");
-					}
-				}
-			} else if (strcmp(tokens[0], "psinfo") == 0) {
-				if (tokenCount != 2) {
-					fprintf(stderr, "Usage: psinfo <PID>\n");
-				} else {
-					display_process_info(tokens[1]);
-				}
-				continue;  // skip the rest of the shell logic for this command
-			} else if (strcmp(tokens[0], "sysinfo") == 0) {
-				if (tokenCount != 2) {
-					fprintf(stderr, "Usage: sysinfo <top N processes>\n");
-				} else {
-					display_system_info(tokens[1]);
-				}
-			} else if ((strcmp(tokens[0], "ascii") == 0)) {
-				if ((tokenCount != 2) || (strcmp(tokens[1], "enable") != 0 && strcmp(tokens[1], "disable") != 0)) {
-					printf("Usage: ascii <enable OR disable>\n");
-				} else {
-					toggle_ascii_art(tokens[1]);
-				}
-			} else if (strcmp(tokens[0], "search") == 0) {
-				if (tokenCount < 3) {
-					printf("Usage: search <directory_path> <search_keyword>\n");
-				} else {
-					runFileSearch(tokens[1], tokens[2]);
-				}
-			} else if (strcmp(tokens[0], "jobs") == 0) {
-				// check for incorrect usage
-				if (tokenCount > 1) {
-					printf("Usage: jobs\n");
-				} else {
-					print_jobs();
-				}
-			} else if ((strcmp(tokens[0], "setcolor") == 0)) {
-				if (tokenCount != 3) {
-					printf("Usage: setcolor <username OR hostname OR currentdir> <COLOR>\n");
-				} else {
-					if (strcmp(tokens[1], "username") == 0) {
-						setUsernameColor(tokens[2]);
-					} else if (strcmp(tokens[1], "hostname") == 0) {
-						setHostnameColor(tokens[2]);
-					} else if (strcmp(tokens[1], "currentdir") == 0) {
-						setCurrentDirColor(tokens[2]);
-					} else {
-						printf("Usage: setcolor <username OR hostname OR currentdir> <COLOR>\n");
-					}
-				}
-			} else {
-				// check if the command should run in the background
-				int run_in_background = (tokenCount > 1 && strcmp(tokens[tokenCount - 1], "&") == 0);
-
-				// handle other commands using execvp
-				// create a child process
-
-				pid_t child_pid = fork();
-
-				if (child_pid == -1) {
-					perror("Error: Fork Failed");
-					free(input);
-					exit(1);
-				}
-
-				if (child_pid == 0) {
-					// child process
-
-					// null-terminate the tokens array
-					tokens[tokenCount] = NULL;
-
-					if (execvp(tokens[0], tokens) == -1) {
-						perror("Error executing command");
-						free(input);
-						exit(1);
-					}
-				} else {
-					// parent process
-					if (!run_in_background) {
-						remove_job(child_pid);
-						// if the command is meant to run in the foreground, wait for the child to finish
-						foreground = child_pid;
-						int status;
-						waitpid(child_pid, &status, WUNTRACED);
-						if (WIFSTOPPED(status)) {
-							// child process was stopped by Ctrl+Z
-							foreground = -1;
-						}
-					} else {
-						// add job information to the linked list
-						add_job(child_pid, input);
-
-						// print information and continue
-						printf("[%d] %d\n", get_next_job_id(), child_pid);
-					}
-				}
-			}
-		}
+		// parse and handle command
+		enum Command command = parseCommand(tokens[0]);
+		handleCommand(command, tokens, tokenCount);
 
 		free(input);
 	}
 
-	// clean up job information when the shell exits
 	cleanup_jobs();
-
 	return 0;
 }
