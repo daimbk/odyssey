@@ -44,8 +44,11 @@ install:
 	@# copy the executable to install dir
 	@cp $(EXECUTABLE) $(INSTALL_DIR)/odyssey
 
-	@echo "alias odie='$(INSTALL_DIR)/odyssey'" >> ~/.bashrc
-	
+	@# Check if the alias already exists in ~/.bashrc before adding it
+	@if ! grep -q "alias odie='$(INSTALL_DIR)/odyssey'" ~/.bashrc; then \
+		echo "alias odie='$(INSTALL_DIR)/odyssey'" >> ~/.bashrc; \
+	fi
+
 	@echo "\nOdyssey shell installed successfully"
 	@echo "Restart terminal session"
 	@echo "Run 'odie' to start Odyssey shell"
