@@ -16,6 +16,15 @@ Odyssey Shell aka odie is a flexible and user-friendly command-line interface de
 - **Redirection and Pipes:** Efficiently manage input/output redirection and pipes for advanced command chaining.
 - **Job Controls & Background Processes:** Execute commands in the background, enabling continuous command entry. This pivotal feature streamlines workflow, enabling parallel task management and productivity optimization in complex setups. Track and control background processes seamlessly with the job list for optimal shell efficiency.
 
+## Bonus Feature
+
+### hehecat
+
+- **Run command:** `hehe`
+<div align="center">
+    <img src="assets/hehecat.png" />
+</div>
+
 ## Getting Started
 
 ### Prerequisites

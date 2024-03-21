@@ -65,6 +65,8 @@ enum Command parseCommand(char *cmd)
 		return CMD_SYSINFO;
 	} else if (strcmp(cmd, "ascii") == 0) {
 		return CMD_ASCII;
+	} else if (strcmp(cmd, "hehe") == 0) {
+		return CMD_HEHE;
 	} else if (strcmp(cmd, "search") == 0) {
 		return CMD_SEARCH;
 	} else if (strcmp(cmd, "jobs") == 0) {
@@ -202,6 +204,13 @@ void handleCommand(enum Command command, char *tokens[], int tokenCount)
 				printf("Usage: ascii <enable OR disable>\n");
 			} else {
 				toggle_ascii_art(tokens[1]);
+			}
+			break;
+		case CMD_HEHE:
+			if (tokenCount != 1) {
+				printf("Usage: hehe\n");
+			} else {
+				hehe();
 			}
 			break;
 		case CMD_SEARCH:
