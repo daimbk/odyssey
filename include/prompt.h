@@ -17,5 +17,6 @@ void getPromptInfo(char *username, char *hostname, char *currentDir);
 void replaceHomeWithPath(char *path);
 char *getCommandFromHistory(int index);
 void initializeHistory();
+void hehe();
 
 #endif
